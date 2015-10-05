@@ -1,0 +1,54 @@
+body {
+    padding-top: 50px;
+}
+
+#content-views {
+    position: relative;
+}
+
+.ng-enter,
+.ng-leave {
+    width: 83.5%;
+    position: absolute;
+}
+
+.ng-enter {
+    -webkit-animation: zoomInDown 0.8s both ease-in;
+    -moz-animation: zoomInDown 0.8s both ease-in;
+    animation: zoomInDown 0.8s both ease-in;
+}
+
+.ng-leave {
+    -webkit-animation: zoomOutDown 0.5s both ease-in;
+    -moz-animation: zoomOutDown 0.5s both ease-in;
+    animation: zoomOutDown 0.5s both ease-in;
+}
+
+main {
+    padding-top: 30px;
+}
+
+header .navbar {
+    border-radius: 0;
+}
+
+.spinner {
+    animation: spin 1s infinite;
+    -webkit-animation: spin 1s infinite;
+    -moz-animation: spin 1s infinite;
+}
+
+@keyframes spin{
+    form { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@-webkit-keyframes spin {
+    from { -webkit-transform:rotate(0deg); }
+    to { -webkit-transform:rotate(360deg); }
+}
+
+@-moz-keyframes spin {
+    from { -webkit-transform:rotate(0deg); }
+    to { -webkit-transform:rotate(360deg); }
+}
