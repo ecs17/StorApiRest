@@ -8,7 +8,7 @@ angular.module('authService', [])
             userName: userName,
             password: password
         }).success(function(data){
-            AuthToken.setToken(data.token);
+            AuthToken.setToken(data);
             return data;
         })
     };
@@ -41,17 +41,21 @@ angular.module('authService', [])
         return $window.localStorage.getItem('token');
     };
     
-    authTokenFactory.setToken = function(token){
-        if(token)
-            $window.localStorage.setItem('token', token);
-        else
+    authTokenFactory.setToken = function(data){
+        if(data && data.token){
+            var userData = {id: data._id, userName: data.userName, name: data.name};
+            $window.localStorage.setItem('token', data.token);
+            $window.localStorage.setItem('userData', JSON.stringify(userData));
+        } else {
             $window.localStorage.removeItem('token');
+            $window.localStorage.removeItem('userData');
+        }
     };
     
     return authTokenFactory;
 })
 
-.factory('AuthInterceptor', function($q, $location, AuthToken){
+.factory('AuthInterceptor', ['$q', '$location', 'AuthToken', '$injector', function($q, $location, AuthToken, $injector){
     var interceptorFactory = {};
     
     interceptorFactory.request = function(config){
@@ -64,10 +68,12 @@ angular.module('authService', [])
     
     interceptorFactory.responseError = function(response){
         if(response.status == 403)
+            $injector.get('$state').go('login')
+//            $state.go('login')
             $location.path('/login');
         
         return $q.reject(response);
     };
     
     return interceptorFactory;
-});
+}]);

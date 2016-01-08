@@ -1,11 +1,11 @@
 <div class="jumbotron text-center">
     <h1>Bienvenido a Casant Stor</h1>
-    <div ng-if="!main.loggedIn">
-        <p>Login to see manage your users.</p>
-        <a href="/login" class="btn btn-primary">Login</a>
+    <div ng-if="!loggedIn">
+        <p>Preciona Iniciar para entrar a la Aplicacion</p>
+        <a ng-click="goLogin()" class="btn btn-primary">Iniciar</a>
     </div>
-    <div ng-if="main.loggedIn">
-        <p>Manage your users.</p>
-        <a href="/users" class="btn btn-primary">View Useres</a>
+    <div ng-if="loggedIn">
+        <p>Informacion General</p>
+        <a ui-sref="users" class="btn btn-primary">View Useres</a>
     </div>
 </div>

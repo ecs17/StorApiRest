@@ -1,37 +1,52 @@
 <div class="page-header">
-    <h1 ng-if="user.type == 'create'">Create User</h1>
-    <h1 ng-if="user.type == 'edit'">Edit User</h1>
+    <h1 ng-if="type == 'create'">Create User</h1>
+    <h1 ng-if="type == 'edit'">Edit User</h1>
 </div>
-<form class="form-horizontal" ng-submit="user.saveUser()">
+<form class="form-horizontal" ng-submit="saveUser()">
     <div class="form-group">
         <label class="col-sm-2 control-label">Name</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" ng-model="user.userData.name">
+            <input type="text" class="form-control" ng-model="userData.name" required>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">UserName</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" ng-model="user.userData.userName">
+            <input type="text" class="form-control" ng-model="userData.userName" required>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">Password</label>
         <div class="col-sm-6">
-            <input type="password" class="form-control" ng-model="user.userData.password">
+            <input type="password" class="form-control" ng-model="userData.password" required>
         </div>
     </div>
     <div class="form-group">
+        <label class="col-sm-2 control-label">Domicilio</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" ng-model="userData.location">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Tipo de Usuario</label>
+        <div class="col-sm-6">
+            <select class="form-control" ng-model="typeUser" ng-options="ut.description for ut in userTypeCatalog" required>
+                <option value="">Selecciona el tipo de Usuario</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
         <div class="col-sm-offset-2 col-sm-6">
-            <button type="submit" class="btn btn-success btn-lg btn-block" ng-if="user.type == 'create'">Create User</button>
-            <button type="submit" class="btn btn-success btn-lg btn-block" ng-if="user.type == 'edit'">Update User</button>
+            <button type="submit" class="btn btn-success btn-lg btn-block" ng-if="type == 'create'">Create User</button>
+            <button type="submit" class="btn btn-success btn-lg btn-block" ng-if="type == 'edit'">Update User</button>
         </div>
     </div>
 </form>
-<div class="row show-hide-message" ng-show="user.message">
+<div class="row show-hide-message" ng-show="message">
     <div class="col-sm-6 col-sm-offset-2">
         <div class="alert alert.info">
-            {{user.message}}
+            {{message}}
         </div>
     </div>
 </div>

@@ -1,6 +1,6 @@
-angular.module('userService', [])
+angular.module('userService', ['ngResource'])
 
-.factory('User', function($http){
+.factory('User', ['$http', function($http){
     var userFactory = {};
     
     userFactory.get = function(id){
@@ -8,17 +8,11 @@ angular.module('userService', [])
     };
     
     userFactory.all = function(){
-        return $http.get('/api/users/');
+        var all = $http.get('/api/users/');
+        return all;
     };
     
     userFactory.create = function(userData){
-        userData.admin = true;
-        userData.location = "Ayuntamiento 189 La Salud";
-        userData.userType = {
-            userDesc: "Administrador",
-            avreb: "Admin",
-            idType: 1
-        };
         return $http.post('/api/users/', userData);
     };
     
@@ -31,4 +25,12 @@ angular.module('userService', [])
     };
     
     return userFactory;
+}])
+
+.factory('UserNow', function(){
+    return {
+        id: '',
+        name: '',
+        userName: ''
+    }
 });

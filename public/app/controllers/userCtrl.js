@@ -1,59 +1,133 @@
-angular.module('userCtrl', ['userService'])
-
-.controller('userController', function(User){
-    var vm = this;
-    vm.processing = true;
-    vm.users = {}
-    
+function UserCtrl($rootScope, User, $scope, $state, $window, $filter, ngTableParams){
+    $scope.processing = true;
+    $scope.users = {}
+    $rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
     User.all().success(function(data){
-        vm.processing = false;
-        vm.users = data;
+        $scope.processing = false;
+        $scope.users = data;
+        loadTable();
     });
     
-    vm.deleteUser = function(id){
-        vm.processing = true;
+    function loadTable(){
+        $scope.tableParams = new ngTableParams({
+            page: 1, // show first page
+            count: 10, // count per page
+            sorting: {
+                name: 'asc'
+            }
+        }, {
+            total: 0, // length of data
+            getData: function ($defer, params) {
+                service.getData($defer, params, $scope.filter);
+            }
+        });
+
+        $scope.$watch("filter.$", function () {
+            $scope.tableParams.reload();
+        });
+
+        function filterData(data, filter) {
+            return $filter('filter')(data, filter)
+        }
+
+        function orderData(data, params) {
+            var d = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : filteredData;
+            return d;
+        }
+
+        function sliceData(data, params) {
+            return data.slice((params.page() - 1) * params.count(), params.page() * params.count())
+        }
+
+        function transformData(data, filter, params) {
+            return sliceData(orderData(filterData(data, filter), params), params);
+        }
+
+        var service = {
+            cachedData: [],
+            getData: function ($defer, params, filter) {
+                var filteredData = filterData($scope.users, filter);
+                var transformedData = sliceData(orderData(filteredData, params), params);
+                params.total(filteredData.length)
+                $defer.resolve(transformedData);
+            }
+        };
+    }
+    
+    $scope.deleteUser = function(id){
+        $scope.processing = true;
         
         User.delete(id).success(function(data){
             User.all().success(function(data){
-                vm.processing = false;
-                vm.users = data;
+                $scope.processing = false;
+                $scope.users = data;
             });
         });
     };
-})
+}
 
-.controller('userCreateController', function(User){
-    var vm = this;
-    
-    vm.type = 'create';
-    vm.saveUser = function(){
-        vm.processing = true;
-        vm.message = '';
+
+function CreateUserCtrl($rootScope, $scope, User, UserType, $window){
+    $scope.type = 'create';
+    $rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    UserType.get().success(function(data){
+        $scope.userTypeCatalog = data;
+    })
+    $scope.saveUser = function(){
+        $scope.processing = true;
+        $scope.message = '';
         
-        User.create(vm.userData).success(function(data){
-            vm.processing = false;
-            vm.userData = {};
-            vm.message = data.message;
+        $scope.userData.userType = {
+            description: $scope.typeUser.description,
+            abbrev: $scope.typeUser.abbrev,
+            idType: $scope.typeUser.idType
+        }
+        if($scope.typeUser.idType == 1)
+            $scope.userData.admin = true;
+        else
+            $scope.userData.admin = false;
+        
+        User.create($scope.userData).success(function(data){
+            $scope.processing = false;
+            $scope.userData = {};
+            $scope.message = data.message;
+            $scope.typeUser = {};
         });
     };
-})
+}
 
-.controller('userEditController', function($routeParams, User){
-    var vm = this;
-    vm.type = 'edit';
-    
-    User.get($routeParams.user_id).success(function(data){
-        vm.userData = data;
+function EditUserCtrl($rootScope, $scope, $state, $stateParams, User, UserType, $window){
+    $scope.type = 'edit';
+    $rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    UserType.get().success(function(data){
+        $scope.userTypeCatalog = data;
+    });
+    User.get($stateParams.userId).success(function(data){
+        $scope.typeUser = (_.where($scope.userTypeCatalog, {idType: data.userType.idType}))[0];
+        console.log($scope.typeUser);
+        $scope.userData = data;
     });
     
-    vm.saveUser = function(){
-        vm.processing = true;
-        vm.message = '';
+    $scope.saveUser = function(){
+        $scope.processing = true;
+        $scope.message = '';
         
-        User.update($routeParams.user_id, vm.userData).success(function(data){
-            vm.processing = false;
-            vm.userData = {};
-            vm.message = data.message;
+        $scope.userData.userType = {
+            description: $scope.typeUser.description,
+            abbrev: $scope.typeUser.abbrev,
+            idType: $scope.typeUser.idType
+        }
+        if($scope.typeUser.idType == 1)
+            $scope.userData.admin = true;
+        else
+            $scope.userData.admin = false;
+        
+        User.update($stateParams.userId, $scope.userData).success(function(data){
+            $scope.processing = false;
+            $scope.userData = {};
+            $scope.message = data.message;
+            if(data.message == 'User updated')
+                $state.go('users');
         })
     }
-})
+}

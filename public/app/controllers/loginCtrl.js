@@ -1,4 +1,4 @@
-function LoginCtrl($rootScope, $location, Auth){
+function LoginCtrl($rootScope, $location, Auth, $state, $scope){
     var vm = this;
     vm.loggedIn = Auth.isLoggedIn();
     vm.usersito = 'Nadie';
@@ -29,6 +29,6 @@ function LoginCtrl($rootScope, $location, Auth){
         Auth.logout();
         
         vm.user = {};
-        $location.path('/login');
+        $state.go('login');
     };
 }

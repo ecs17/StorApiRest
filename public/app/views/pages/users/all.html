@@ -1,34 +1,37 @@
 <div class="page-header">
     <h1>
         Users
-        <a href="/users/create" class="btn btn-default">
-            <span class="glyphicon glyphicon-plus"></span>
+        <a ui-sref="create" class="btn btn-default">
+            <i class="fa fa-user-plus"></i>
             New User
         </a>
     </h1>
 </div>
-<div class="jumbotron text-center" ng-show="user.processing">
-    <span class="glyphicon glyphicon-repeat spinner"></span>
+<div class="jumbotron text-center" ng-show="processing">
+    <i class="fa fa-repeat spinner"></i>
     <p>Loading Users.......</p>
 </div>
-<table class="table table-bordered table-striped" ng-show="user.users">
-    <thead>
-        <tr>
-            <th>_id</th>
-            <th>Name</th>
-            <th>UserName</th>
-            <th class="col-sm-2"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="person in user.users">
-            <td>{{ person._id }}</td>
-            <td>{{ person.name }}</td>
-            <td>{{ person.userName }}</td>
-            <td class="col-sm-2">
-                <a href="/users/{{person._id}}" class="btn btn-primary">Edit</a>
-                <a href="#" ng-click="user.deleteUser(person._id)" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-xs-11 col-sm-11 col-md-11">
+        <p>Filtro:
+            <input class="form-control" type="text" ng-model="filter.$" />
+        </p>
+        <table ng-table="tableParams" class="table">
+            <tr ng-repeat="user in $data">
+                <td data-title="'Nombre'" sortable="'id'">
+                    {{user.name}}
+                </td>
+                <td data-title="'Nombre del Usuario'" sortable="'name'">
+                    {{user.userName}}
+                </td>
+                <td data-title="'Tipo de Usuario'" sortable="'tipo'">
+                    {{user.userType.description}}
+                </td>
+                <td>
+                    <a ui-sref="edituser({userId: user._id})" title="Actualizar Usuario" class="btn btn-primary" ng-disabled="{{user.userName == userNow.userName}}"><i class="fa fa-refresh"></i></a>
+                    <a href="#" ng-click="deleteUser(user._id)" title="Eliminar Usuario" class="btn btn-danger" ng-disabled="{{user.userName == userNow.userName}}"><i class="fa fa-user-times"></i></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

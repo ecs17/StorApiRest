@@ -21,8 +21,12 @@ mongoose.connect(config.database);
 
 app.use(express.static(__dirname + '/public'));
 
-var apiRouter = require('./app/routes/api')(app, express);
-app.use('/api', apiRouter);
+var usersTypeCatalogRouter = require('./app/routes/catalogs')(app, express);
+var usersRouter = require('./app/routes/users')(app, express);
+var productsRouter = require('./app/routes/products')(app, express);
+app.use('/api', usersRouter);
+app.use('/api', productsRouter);
+app.use('/api', usersTypeCatalogRouter);
 
 app.get('*', function(req, res){
     res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
