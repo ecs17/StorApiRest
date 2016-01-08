@@ -6,7 +6,6 @@ module.exports = function(app, express){
     apiRouter.route('/product')
         .post(function(req, res){
             var product = new Product();
-            console.log(req.body.expDate);
             product.bar_code = req.body.bar_code;
             product.cv_product = req.body.cv_product;
             product.name_prod = req.body.name_prod;
@@ -22,7 +21,6 @@ module.exports = function(app, express){
             product.measure_type = req.body.measure_type;
             product.taxes = req.body.taxes;
             
-            console.log(product);
             product.save(function(err){
                 if(err){
                     if(err.code == 11000)

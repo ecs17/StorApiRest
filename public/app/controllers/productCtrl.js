@@ -16,7 +16,6 @@ function CreateProductCtrl($rootScope, $scope, ProductPres, MeasureType, Product
     
     $scope.chageDateExp = function (exp) {
         $scope.product.expDate = exp.toISOString();
-        console.log($scope.product.expDate);
     }
     
     $scope.open = function ($event) {
@@ -26,7 +25,6 @@ function CreateProductCtrl($rootScope, $scope, ProductPres, MeasureType, Product
     };
     
     $scope.saveProduct = function(){
-        console.log($scope.product);
         $scope.product.presentation_type = {
             abbrev: $scope.presentation_type.abbrev,
             description: $scope.presentation_type.description,
@@ -38,7 +36,6 @@ function CreateProductCtrl($rootScope, $scope, ProductPres, MeasureType, Product
             description: $scope.measure_type.description,
             idType: $scope.measure_type.idType
         };
-        console.log($scope.product);
         
         Product.create($scope.product).success(function(data){
             $scope.processing = false;
