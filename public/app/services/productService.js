@@ -7,5 +7,9 @@ angular.module('productService', ['ngResource'])
         return $http.post('/api/product', productData);
     };
     
+    productFactory.all = function(){
+        return $http.get('/api/product');
+    };
+    
     return productFactory;
 }])

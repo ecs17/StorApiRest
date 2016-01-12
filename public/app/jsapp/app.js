@@ -46,6 +46,11 @@ angular.module('casantApp').config(
                 templateUrl: 'app/views/pages/users/single.html',
                 controller: EditUserCtrl
             })
+            .state('products', {
+                url: '/products',
+                templateUrl: 'app/views/pages/products/all.html',
+                controller: ProductCtrl
+            })
             .state('newProduct', {
                 url: '/createProduct',
                 templateUrl: 'app/views/pages/products/newAndUpdate.html',

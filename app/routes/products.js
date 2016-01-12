@@ -31,6 +31,13 @@ module.exports = function(app, express){
                 }
                 res.json({message: 'Producto creado'});
             });
+        })
+        .get(function(req, res){
+            Product.find(function(err, products){
+                if(err) res.send(err);
+                
+                res.json(products);
+            });
         });
     
     return apiRouter;

@@ -1,4 +1,25 @@
+function ProductCtrl($rootScope, $scope, Product, $window, $filter, ngTableParams){
+    $scope.processing = true;
+    $scope.products = {}
+    //$rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    Product.all().success(function(data){
+        $scope.processing = false;
+        $scope.products = data;
+        loadTable($scope, $filter, $scope.products, ngTableParams);
+    });
+}
 function CreateProductCtrl($rootScope, $scope, ProductPres, MeasureType, Product) {
+    $scope.product = {
+        stocks: '',
+        taxes: {
+            iva: '',
+            ieps: ''
+        },
+        price: {
+            purchase_price: '',
+            sale_price: ''
+        }
+    };
     $scope.typeTask = 'create';
     $scope.items = {
         openexp: false

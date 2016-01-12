@@ -1,0 +1,43 @@
+<div class="page-header">
+    <h1>
+        Productos
+        <a ui-sref="newProduct" class="btn btn-default">
+            <i class="fa fa-plus"></i>
+            Nuevo Producto
+        </a>
+    </h1>
+</div>
+<div class="jumbotron text-center" ng-show="processing">
+    <i class="fa fa-repeat spinner"></i>
+    <p>Cargando Productos.......</p>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <p>Filtro:
+            <input class="form-control" type="text" ng-model="filter.$" />
+        </p>
+        <table ng-table="tableParams" class="table">
+            <tr ng-repeat="product in $data">
+                <td data-title="'Clv Producto'" sortable="'cv_product'">
+                    {{product.cv_product}}
+                </td>
+                <td data-title="'Nombre Producto'" sortable="'name_prod'">
+                    {{product.name_prod}}
+                </td>
+                <td data-title="'Precio Venta'" sortable="'price.sale_price'">
+                    {{product.price.sale_price}}
+                </td>
+                <td data-title="'Existencia'" sortable="'stocks'">
+                    {{product.stocks}}
+                </td>
+                <td data-title="'Caducidad'" sortable="'dates.expiration'">
+                    {{product.dates.expiration}}
+                </td>
+                <td>
+                    <a ui-sref="editProduct({productId: product._id})" title="Actualizar Producto" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                    <a href="#" ng-click="deleteProduct(product._id)" title="Eliminar Producto" class="btn btn-danger"><i class="fa fa-user-times"></i></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

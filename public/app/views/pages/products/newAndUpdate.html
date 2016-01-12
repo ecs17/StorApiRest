@@ -28,7 +28,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">Existencias</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" ng-model="product.stocks" placeholder="Captura Cantidad" required>
+            <input type="text" class="form-control" stoks-number ng-model="product.stocks" placeholder="Captura Cantidad" required>
         </div>
         <label class="col-sm-2 control-label">Fecha de Caducidad</label>
         <div class="col-sm-4">
@@ -57,12 +57,12 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">IVA</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" ng-model="product.taxes.iva" bar-code>
+            <input type="text" class="form-control" stoks-number ng-model="product.taxes.iva">
         </div>
         <label class="col-sm-1 control-label">%</label>
         <label class="col-sm-2 control-label">IEPS</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" ng-model="product.taxes.ieps" bar-code>
+            <input type="text" class="form-control" stoks-number ng-model="product.taxes.ieps">
         </div>
         <label class="col-sm-1 control-label">%</label>
     </div>
@@ -73,11 +73,11 @@
                 <div class="panel-body">
                     <label class="col-sm-2 control-label">Precio Compra</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" ng-model="product.price.purchase_price" required>
+                        <input type="text" class="form-control" stoks-number ng-model="product.price.purchase_price" required>
                     </div>
                     <label class="col-sm-2 control-label">Precio Venta</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" ng-model="product.price.sale_price" required>
+                        <input type="text" class="form-control" stoks-number ng-model="product.price.sale_price" required>
                     </div>
                 </div>
             </div>

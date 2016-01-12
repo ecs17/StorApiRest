@@ -18,13 +18,13 @@
         </p>
         <table ng-table="tableParams" class="table">
             <tr ng-repeat="user in $data">
-                <td data-title="'Nombre'" sortable="'id'">
+                <td data-title="'Nombre'" sortable="'name'">
                     {{user.name}}
                 </td>
-                <td data-title="'Nombre del Usuario'" sortable="'name'">
+                <td data-title="'Nombre del Usuario'" sortable="'userName'">
                     {{user.userName}}
                 </td>
-                <td data-title="'Tipo de Usuario'" sortable="'tipo'">
+                <td data-title="'Tipo de Usuario'" sortable="'userType.description'">
                     {{user.userType.description}}
                 </td>
                 <td>

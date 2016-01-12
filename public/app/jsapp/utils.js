@@ -1,4 +1,4 @@
-function loadTableasdasd(){
+function loadTable($scope, $filter, dataTable, ngTableParams) {
     $scope.tableParams = new ngTableParams({
         page: 1, // show first page
         count: 10, // count per page
@@ -15,13 +15,14 @@ function loadTableasdasd(){
     $scope.$watch("filter.$", function () {
         $scope.tableParams.reload();
     });
-    
+
     function filterData(data, filter) {
         return $filter('filter')(data, filter)
     }
 
     function orderData(data, params) {
-        return params.sorting() ? $filter('orderBy')(data, params.orderBy()) : filteredData;
+        var d = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : filteredData;
+        return d;
     }
 
     function sliceData(data, params) {
@@ -35,24 +36,10 @@ function loadTableasdasd(){
     var service = {
         cachedData: [],
         getData: function ($defer, params, filter) {
-            if (service.cachedData.length > 0) {
-                console.log("using cached data")
-                var filteredData = filterData(service.cachedData, filter);
-                var transformedData = sliceData(orderData(filteredData, params), params);
-                params.total(filteredData.length)
-                $defer.resolve(transformedData);
-            } else {
-                console.log("fetching data")
-                $http.get("data.json").success(function (resp) {
-                    angular.copy(resp, service.cachedData)
-                    params.total(resp.length)
-                    var filteredData = $filter('filter')(resp, filter);
-                    var transformedData = transformData(resp, filter, params)
-
-                    $defer.resolve(transformedData);
-                });
-            }
-
+            var filteredData = filterData(dataTable, filter);
+            var transformedData = sliceData(orderData(filteredData, params), params);
+            params.total(filteredData.length)
+            $defer.resolve(transformedData);
         }
     };
 }
