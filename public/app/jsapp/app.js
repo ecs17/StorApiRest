@@ -4,14 +4,6 @@ angular.module('casantApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'authServ
 angular.module('casantApp').config(function($httpProvider){
     $httpProvider.interceptors.push('AuthInterceptor');
 });
-/*.controller('userController', function(userFactory){
-    var vm = this;
-    
-    userFactory.all()
-        .success(function(data){
-            vm.userData = data;
-        });
-});*/
 
 angular.module('casantApp').config(
     ['$stateProvider', '$urlRouterProvider',
@@ -55,6 +47,25 @@ angular.module('casantApp').config(
                 url: '/createProduct',
                 templateUrl: 'app/views/pages/products/newAndUpdate.html',
                 controller: CreateProductCtrl
+            })
+            .state('addStocks', {
+                url: '/addStocks',
+                templateUrl: 'app/views/pages/products/addStocks.html',
+                controller: AddStocksCtrl
+            })
+            .state('editProduct', {
+                url: '/editProduct/:productId',
+                templateUrl: 'app/views/pages/products/newAndUpdate.html',
+                controller: EditProductCtrl
+            })
+            .state('nopermission', {
+                url: 'noPermission',
+                templateUrl: 'app/views/pages/noPermission.html'
+            })
+            .state('startSale', {
+                url: '/sale',
+                templateUrl: 'app/views/pages/sales/sale.html',
+                constroller: SaleCtrl
             })
             
         }

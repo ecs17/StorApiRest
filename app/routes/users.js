@@ -16,7 +16,7 @@ module.exports = function(app, express){
         
         User.findOne({
             userName: req.body.userName
-        }).select('name userName password').exec(function(err, user){
+        }).select('name userName password userType').exec(function(err, user){
             if(err) throw err;
 
             if(!user){
@@ -35,11 +35,13 @@ module.exports = function(app, express){
                     var token = jwt.sign(user, superSecret, {
                         expiresInMinutes: 1440
                     });
+                    console.log(user)
                     res.json({
                         success: true,
                         name: user.name,
                         _id: user._id,
                         userName: user.userName,
+                        type: user.userType,
                         message: 'Enjoy your token!',
                         token: token
                     });

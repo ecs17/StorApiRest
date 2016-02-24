@@ -11,5 +11,17 @@ angular.module('productService', ['ngResource'])
         return $http.get('/api/product');
     };
     
+    productFactory.update = function(productId, product){
+        return $http.put('/api/product/' + productId, product);
+    };
+    
+    productFactory.get = function(id){
+        return $http.get('/api/product/' + id);
+    };
+    
+    productFactory.delete = function(id){
+        return $http.delete('/api/product/' + id);
+    }
+    
     return productFactory;
 }])

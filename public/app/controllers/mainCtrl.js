@@ -46,4 +46,12 @@ angular.module('mainCtrl', [])
         $scope.user = {};
         $state.go('login');
     };
+    
+    //Funcion para abrir estado en modal.window
+    /*$scope.openModal = function(){
+        var url = $state.href('startSale');
+        var left = screen.width / 2 - 200, top = screen.height / 2 - 250;
+        $window.open(url, '', 'width=400,height=500');
+        $scope.$state = $state;
+    };*/
 });

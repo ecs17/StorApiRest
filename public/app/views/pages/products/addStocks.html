@@ -1,0 +1,62 @@
+<div class="page-header">
+    <h1>
+        Productos
+    </h1>
+</div>
+<div class="jumbotron text-center" ng-show="processing">
+    <i class="fa fa-repeat spinner"></i>
+    <p>Cargando Productos.......</p>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <p>Filtro:
+            <input class="form-control" type="text" ng-model="filter.$" />
+        </p>
+        <table ng-table="tableParams" class="table">
+            <tr ng-repeat="product in $data">
+                <td data-title="'Clv Producto'" sortable="'cv_product'">
+                    {{product.cv_product}}
+                </td>
+                <td data-title="'Nombre Producto'" sortable="'name_prod'">
+                    {{product.name_prod}}
+                </td>
+                <td data-title="'Precio Compra'" sortable="'price.purchase_price'">
+                    <span ng-if="!product.$edit">{{product.price.purchase_price}}</span>
+                    <div ng-if="product.$edit">
+                        <input class="form-control" type="text" ng-model="product.price.purchase_price" stoks-number/>
+                    </div>
+                </td>
+                <td data-title="'Precio Venta'" sortable="'price.sale_price'">
+                    <span ng-if="!product.$edit">{{product.price.sale_price}}</span>
+                    <div ng-if="product.$edit">
+                        <input class="form-control" ng-class="{highlight:product.price.sale_price < product.price.purchase_price}" type="text" ng-model="product.price.sale_price" stoks-number/>
+                    </div>
+                </td>
+                <td data-title="'Existencia'" sortable="'stocks'">
+                    <span ng-if="!product.$edit">{{product.stocks}}</span>
+                    <div ng-if="product.$edit">
+                        <input class="form-control" type="text" ng-model="product.stocks" stoks-number/>
+                    </div>
+                </td>
+                <td data-title="'Caducidad'" sortable="'dates.expiration'">
+                    <span ng-if="!product.$edit">{{product.dates.expiration}}</span>
+                    <div ng-if="product.$edit" class="edit-expiratio">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-change="chageDateExp(product.dates.expiration)" ng-model="product.dates.expiration" is-open="items.openexp" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" disabled/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </td>
+                <td>
+                    <a ng-if="!product.$edit" href="" class="btn btn-default btn-sm" title="Actualizar Producto" ng-click="product.$edit = true; saveProdTemp(product)"><i class="fa fa-pencil"></i></a>
+                    <div ng-if="product.$edit" class="edit-btns">
+                        <a ng-if="product.$edit" href="" class="btn btn-primary btn-sm" title="Guardar Producto" ng-click="product.$edit = false; saveProduct(product)"><i class="fa fa-floppy-o"></i></a>
+                        <a ng-if="product.$edit" href="" class="btn btn-danger btn-sm" title="Cancelar" ng-click="product.$edit = false; cancelSave(product)"><i class="fa fa-times"></i></a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

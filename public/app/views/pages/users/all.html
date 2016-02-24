@@ -1,7 +1,7 @@
 <div class="page-header">
     <h1>
         Users
-        <a ui-sref="create" class="btn btn-default">
+        <a ng-if="userNow.type.idType == 1" ui-sref="create" class="btn btn-default">
             <i class="fa fa-user-plus"></i>
             New User
         </a>
@@ -28,7 +28,7 @@
                     {{user.userType.description}}
                 </td>
                 <td>
-                    <a ui-sref="edituser({userId: user._id})" title="Actualizar Usuario" class="btn btn-primary" ng-disabled="{{user.userName == userNow.userName}}"><i class="fa fa-refresh"></i></a>
+                    <a ui-sref="edituser({userId: user._id})" title="Actualizar Usuario" class="btn btn-primary" ng-disabled="{{user.userName == userNow.userName}}"><i class="fa fa-pencil"></i></a>
                     <a href="#" ng-click="deleteUser(user._id)" title="Eliminar Usuario" class="btn btn-danger" ng-disabled="{{user.userName == userNow.userName}}"><i class="fa fa-user-times"></i></a>
                 </td>
             </tr>

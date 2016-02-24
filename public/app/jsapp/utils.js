@@ -43,3 +43,17 @@ function loadTable($scope, $filter, dataTable, ngTableParams) {
         }
     };
 }
+
+function getPrice_iva_ipes(purchase_price, iva, ieps){
+    var sale_price = 0;
+    var ieps_tem = 0;
+    var iva_tem = 0;
+    if(ieps !== undefined){
+        ieps_tem = purchase_price * (ieps / 100)
+    }
+    if(iva !== undefined){
+        iva_tem = purchase_price * (iva / 100);
+    }
+    sale_price = parseFloat(purchase_price) + iva_tem + ieps_tem + (purchase_price * 0.25);
+    return sale_price;
+}

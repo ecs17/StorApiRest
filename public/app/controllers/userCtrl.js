@@ -2,6 +2,9 @@ function UserCtrl($rootScope, User, $scope, $state, $window, $filter, ngTablePar
     $scope.processing = true;
     $scope.users = {}
     $rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    if($rootScope.userNow.type.idType !== 1){
+        $state.go('nopermission');
+    }
     User.all().success(function(data){
         $scope.processing = false;
         $scope.users = data;
@@ -15,6 +18,7 @@ function UserCtrl($rootScope, User, $scope, $state, $window, $filter, ngTablePar
             User.all().success(function(data){
                 $scope.processing = false;
                 $scope.users = data;
+                loadTable($scope, $filter, $scope.users, ngTableParams);
             });
         });
     };
@@ -58,7 +62,6 @@ function EditUserCtrl($rootScope, $scope, $state, $stateParams, User, UserType, 
     });
     User.get($stateParams.userId).success(function(data){
         $scope.typeUser = (_.where($scope.userTypeCatalog, {idType: data.userType.idType}))[0];
-        console.log($scope.typeUser);
         $scope.userData = data;
     });
     

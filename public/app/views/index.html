@@ -13,15 +13,12 @@
     <link rel="stylesheet" type="text/css" href="assets/css/fontawesome/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/bootstrap/animate.css">
     <link rel="stylesheet" href="assets/css/ng-table/ng-table.css">
-    <!--<link rel="stylesheet" type="text/css" href="assets/css/main.css">
-        <link rel="stylesheet" href="../../assets/css/main.css">-->
-    <!--
-    <link rel="stylesheet" href="assets/css/metisMenu/metisMenu.min.css">-->
+    <link rel="stylesheet" href="app/cssapp/main.css">
     <link rel="stylesheet" href="app/cssapp/sb-admin.css">
 </head>
 
 <body ng-controller="mainController">
-    <div id="wrapper">
+    <div id="wrapper" ng-show="$state.current.name !== 'sale'">
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="margin-bottom: 0" ng-if="loggedIn" ng-disabled="!loggedIn">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -35,6 +32,7 @@
                 </a>
             </div>
             <ul class="nav navbar-right top-nav">
+                <li><a href="#">Inicar Venta</a></li>
                 <li><a href="#">Reportes</a></li>
                 <li><a href="#">Pendientes</a></li>
                 <li ng-if="!loggedIn">
@@ -56,7 +54,7 @@
             </ul>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav" id="side-menu">
-                    <li>
+                    <li ng-if="userNow.type.idType == 1">
                         <a ui-sref="users">
                             <i class="fa fa-users"></i> Administracion De Usuarios
                         </a>
@@ -72,6 +70,25 @@
                             <li>
                                 <a ui-sref="products"><i class="fa fa-refresh"></i> Consulta y Modifica Productos</a>
                             </li>
+                            <li>
+                                <a ui-sref="addStocks"><i class="fa fa-bolt"></i> <i class="fa fa-plus"></i> Agragar Existencias</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-shopping-cart"></i> Ventas <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a ui-sref="startSale"><i class="fa fa-sign-in"></i> Iniciar Venta</a>
+                            </li>
+                            <li>
+                                <a ui-sref="salesReport"><i class="fa fa-bar-chart"> Reportes de Venta </i></a>
+                            </li>
+                            <li>
+                                <a ui-sref="cancelSale"><i class="fa fa-times"> Cancelar Venta </i></a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -81,6 +98,9 @@
             <div class="container-fluid" ui-view></div>
         </div>
     </div>
+    <!--<div class="col-md-12">
+        <div class="container-fluid" ui-view="sale"></div>
+    </div>-->
     <script src="assets/js/jquery/jquery-1.11.3.js"></script>
     <script src="assets/js/angular/angular.min.js"></script>
     <script src="assets/js/angular/angular-route.js"></script>
@@ -94,6 +114,7 @@
     <script src="app/controllers/mainCtrl.js"></script>
     <script src="app/controllers/userCtrl.js"></script>
     <script src="app/controllers/productCtrl.js"></script>
+    <script src="app/controllers/salesCtrl.js"></script>
     <!--        <script src="app/controllers/loginCtrl.js"></script>-->
     <script src="app/services/authService.js"></script>
     <script src="app/services/userService.js"></script>

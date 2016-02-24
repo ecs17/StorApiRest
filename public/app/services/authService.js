@@ -43,7 +43,7 @@ angular.module('authService', [])
     
     authTokenFactory.setToken = function(data){
         if(data && data.token){
-            var userData = {id: data._id, userName: data.userName, name: data.name};
+            var userData = {id: data._id, userName: data.userName, name: data.name, type: data.type};
             $window.localStorage.setItem('token', data.token);
             $window.localStorage.setItem('userData', JSON.stringify(userData));
         } else {

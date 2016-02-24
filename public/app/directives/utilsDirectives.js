@@ -24,7 +24,7 @@ angular.module('BarCodeValidator', [])
 		link: function (scope) {	
 			scope.$watch('product.stocks', function(newValue,oldValue) {
                 check(newValue);
-                if (isNaN(newValue)) {
+                if (isNaN(newValue) && scope.product !== undefined) {
                     if(typeof newValue === 'undefined')
                         scope.product.stocks = '';
                     else
@@ -33,7 +33,7 @@ angular.module('BarCodeValidator', [])
             });	
 			scope.$watch('product.taxes.iva', function(newValue,oldValue) {
                 check(newValue);
-                if (isNaN(newValue)) {
+                if (isNaN(newValue) && scope.product !== undefined) {
                     if(typeof newValue === 'undefined')
                         scope.product.taxes.iva = '';
                     else
@@ -42,7 +42,7 @@ angular.module('BarCodeValidator', [])
             });	
 			scope.$watch('product.taxes.ieps', function(newValue,oldValue) {
                 check(newValue);
-                if (isNaN(newValue)) {
+                if (isNaN(newValue) && scope.product !== undefined) {
                     if(typeof newValue === 'undefined')
                         scope.product.taxes.ieps = '';
                     else
@@ -51,7 +51,7 @@ angular.module('BarCodeValidator', [])
             });	
 			scope.$watch('product.price.purchase_price', function(newValue,oldValue) {
                 check(newValue);
-                if (isNaN(newValue)) {
+                if (isNaN(newValue) && scope.product !== undefined) {
                     if(typeof newValue === 'undefined')
                         scope.product.price.purchase_price = '';
                     else
@@ -60,7 +60,7 @@ angular.module('BarCodeValidator', [])
             });	
 			scope.$watch('product.price.sale_price', function(newValue,oldValue) {
                 check(newValue);
-                if (isNaN(newValue)) {
+                if (isNaN(newValue) && scope.product !== undefined) {
                     if(typeof newValue === 'undefined')
                         scope.product.price.sale_price = '';
                     else

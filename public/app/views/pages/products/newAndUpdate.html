@@ -68,17 +68,26 @@
     </div>
     <div class="from-group">
         <div class="col-sm-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">Precio</div>
+            <div class="panel panel-info">
+                    <div ng-if="!priceInvalid" class="panel-heading">
+                        <h5>Precio</h5>
+                    </div>
+                    <div ng-if="priceInvalid" class="panel-heading col-sm-6">
+                        <h5>Precio</h5>
+                    </div>
+                    <div ng-if="priceInvalid" class="panel-heading col-sm-6">
+                        <h5>Precio Venta no genera ganacia</h5>
+                    </div>
                 <div class="panel-body">
                     <label class="col-sm-2 control-label">Precio Compra</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-2">
                         <input type="text" class="form-control" stoks-number ng-model="product.price.purchase_price" required>
                     </div>
                     <label class="col-sm-2 control-label">Precio Venta</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" stoks-number ng-model="product.price.sale_price" required>
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" stoks-number ng-model="product.price.sale_price" name="price" ng-class="{highlight:priceInvalid}" required> 
                     </div>
+                    <h3><label class="col-sm-4 label label-info">Precio Venta Sugerido: {{priceSug}}</label></h3>
                 </div>
             </div>
         </div>
