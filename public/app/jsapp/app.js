@@ -1,5 +1,5 @@
 'use strict';
-angular.module('casantApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'authService', 'mainCtrl', 'userService', 'catalogService', 'ngTable', 'BarCodeValidator', 'productService']);
+angular.module('casantApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'authService', 'mainCtrl', 'userService', 'catalogService', 'ngTable', 'BarCodeValidator', 'DinamicTab', 'productService', 'angucomplete-alt']);
 
 angular.module('casantApp').config(function($httpProvider){
     $httpProvider.interceptors.push('AuthInterceptor');
@@ -58,14 +58,14 @@ angular.module('casantApp').config(
                 templateUrl: 'app/views/pages/products/newAndUpdate.html',
                 controller: EditProductCtrl
             })
-            .state('nopermission', {
-                url: 'noPermission',
-                templateUrl: 'app/views/pages/noPermission.html'
-            })
             .state('startSale', {
                 url: '/sale',
                 templateUrl: 'app/views/pages/sales/sale.html',
-                constroller: SaleCtrl
+                controller: SaleCtrl
+            })
+            .state('nopermission', {
+                url: 'noPermission',
+                templateUrl: 'app/views/pages/noPermission.html'
             })
             
         }

@@ -23,5 +23,9 @@ angular.module('productService', ['ngResource'])
         return $http.delete('/api/product/' + id);
     }
     
+    productFactory.getSearch = function(anyField){
+        return $http.get('/api/product/search/' + anyField);
+    }
+    
     return productFactory;
 }])

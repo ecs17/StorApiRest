@@ -99,6 +99,19 @@ module.exports = function(app, express){
                 
                 res.json({message: 'Successfully deleted'});
             })
-        })
+        });
+    
+    apiRouter.route('/product/search/:search')
+        .get(function(req, res){
+            console.log(req.params.search);
+            var re = new RegExp('^'+req.params.search, 'i');
+            var query = [{'bar_code': req.params.search}, {'cv_product': {$regex: re}}, {'name_prod': {$regex: re}}, {'desc_prod': {$regex: re}}];
+            Product.find().or(query).exec(function(err, products){
+                if(err) res.send(err);
+                
+                res.json(products);
+            })
+        });
+        
     return apiRouter;
 }

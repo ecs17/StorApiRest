@@ -5,3 +5,102 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-7">
+            <div angucomplete-alt id="ex4" placeholder="Captura codigo de barras, clave del producto, descripcion o nombre" pause="100" selected-object="selectedProduct" local-data="productList" search-fields="bar_code,cv_product,name_prod,desc_prod" title-field="cv_product,name_prod,desc_prod" description-field="bar_code" minlength="1" input-class="form-control form-control-small" match-class="highlight-similar" override-suggestions="true" clear-selected="true" input-changed="loadProducts" auto-match="true">
+            </div>
+<!--
+            <div class="result">
+                <div class="" ng-show="selectedProduct">
+                    You selected <span class="bold-span">{{selectedProduct.originalObject}}</span>
+                </div>
+            </div>
+-->
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-info" href="" title="Buscar Productos" ><i class="fa fa-search" aria-hidden="true"></i> Buscar productos</a>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10">
+            <a class="btn btn-primary" href="" title="Buscar Productos" ng-click="addTabSale()"><i class="fa fa-cart-plus" aria-hidden="true"></i> Nueva venta</a>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <uib-tabset id="tabsSales">
+            <uib-tab ng-repeat="tab in tabsSale" active="tab.active" ng-click="activTab($index)">
+                <uib-tab-heading>
+                    {{tab.name}} <i class="fa fa-times" aria-hidden="true" ng-click="removeTab($index, tab.name)"></i>
+                </uib-tab-heading>
+                <div class="col-md-12">
+                    <i class="fa fa-list" aria-hidden="true">Lista de venta</i>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-condensed table-sales">
+                            <thead>
+                                <tr>
+                                    <th>Codigo de Barras</th>
+                                    <th>Nombre del producto</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Importe</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbody-sales">
+                                <tr ng-repeat="productRow in tab.listProductsToSales">
+                                    <td>{{productRow.bar_code}}</td>
+                                    <td>{{productRow.name_prod}}</td>
+                                    <td>{{productRow.sale_price}}</td>
+                                    <td class="col-xs-1">
+                                        <input type="number" class="form-control" min="0.001" step="any" ng-change="changeQuantity(productRow, tab)" ng-model="productRow.quantity">
+                                    </td>
+                                    <td>{{productRow.amount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <a class="btn btn-primary btn-lg" href="" title="Cobrar" ><i class="fa fa-check fa-lg" aria-hidden="true"></i> Cobrar (F2)</a>
+                    <a class="btn btn-danger btn-lg" href="" title="Cancelar Venta" ><i class="fa fa-times fa-lg" aria-hidden="true"></i> Cancelar Venta (F4)</a>
+                </div>
+                <div class="col-md-4 col-md-offset-3">
+                    <div class="col-md-12">
+                        <label class="col-sm-5 control-label">Sub-Total: </label>
+                        <div class="col-sm-5 col-md-offset-2">
+                            <u> {{tab.subTotal}}</u>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="col-sm-5 control-label">IVA: </label>
+                        <div class="col-sm-5 col-md-offset-2">
+                            <u> {{tab.ivaSales}}</u>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="col-sm-5 control-label">Total: </label>
+                        <div class="col-sm-5 col-md-offset-2">
+                            <u> {{tab.totalSales}}</u>
+                        </div>
+                    </div>
+                </div>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+</div>
+<script type="text/ng-template" id="confirmCloseSalesModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Advertencia!</h3>
+    </div>
+    <div class="modal-body">
+        <p>Se perdera la venta de la pestaña actual, ¿Estas seguro que quieres cerrarla?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

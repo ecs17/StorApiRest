@@ -20,3 +20,18 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.highlight-similar {
+	color: #ff0000;
+}
+
+.table-sales{
+    height:350px;
+}
+
+.tbody-sales{
+    overflow-y: scroll;
+    height: 300px;
+    width: 100%;
+    position: absolute;
+}

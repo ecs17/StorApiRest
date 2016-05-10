@@ -24,6 +24,7 @@ app.use(express.static(__dirname + '/public'));
 var usersTypeCatalogRouter = require('./app/routes/catalogs')(app, express);
 var usersRouter = require('./app/routes/users')(app, express);
 var productsRouter = require('./app/routes/products')(app, express);
+
 app.use('/api', usersRouter);
 app.use('/api', productsRouter);
 app.use('/api', usersTypeCatalogRouter);
