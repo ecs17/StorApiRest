@@ -16,28 +16,30 @@
         <p>Filtro:
             <input class="form-control" type="text" ng-model="filter.$" />
         </p>
-        <table ng-table="tableParams" class="table">
-            <tr ng-repeat="product in $data">
-                <td data-title="'Clv Producto'" sortable="'cv_product'">
-                    {{product.cv_product}}
-                </td>
-                <td data-title="'Nombre Producto'" sortable="'name_prod'">
-                    {{product.name_prod}}
-                </td>
-                <td data-title="'Precio Venta'" sortable="'price.sale_price'">
-                    {{product.price.sale_price}}
-                </td>
-                <td data-title="'Existencia'" sortable="'stocks'">
-                    {{product.stocks}}
-                </td>
-                <td data-title="'Caducidad'" sortable="'dates.expiration'">
-                    {{product.dates.expiration}}
-                </td>
-                <td>
-                    <a ui-sref="editProduct({productId: product._id})" title="Actualizar Producto" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
-                    <a href="#" ng-click="deleteProduct(product._id)" title="Eliminar Producto" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                </td>
-            </tr>
-        </table>
+        <div class="table-responsive">
+            <table ng-table="tableParams" class="table table-striped table-hover table-condensed">
+                <tr ng-repeat="product in $data">
+                    <td data-title="'Clv Producto'" sortable="'cv_product'">
+                        {{product.cv_product}}
+                    </td>
+                    <td data-title="'Nombre Producto'" sortable="'name_prod'">
+                        {{product.name_prod}}
+                    </td>
+                    <td data-title="'Precio Venta'" sortable="'price.sale_price'">
+                        {{product.price.sale_price}}
+                    </td>
+                    <td data-title="'Existencia'" sortable="'stocks'">
+                        {{product.stocks}}
+                    </td>
+                    <td data-title="'Caducidad'" sortable="'dates.expiration'">
+                        {{product.dates.expiration}}
+                    </td>
+                    <td>
+                        <a ui-sref="editProduct({productId: product._id})" title="Actualizar Producto" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
+                        <a href="#" ng-click="deleteProduct(product._id)" title="Eliminar Producto" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>

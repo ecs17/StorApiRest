@@ -25,13 +25,23 @@
 	color: #ff0000;
 }
 
-.table-sales{
-    height:350px;
+.table-sales {
+    table-layout:fixed;
 }
 
-.tbody-sales{
-    overflow-y: scroll;
-    height: 300px;
-    width: 100%;
-    position: absolute;
+.div-table-content {
+    height:300px;
+    overflow-y:auto;
+}
+
+.ng-table th {
+    text-align: left;
+}
+
+.col-delete {
+    width: 60px !important;
+}
+
+.col-name {
+    width: 500px !important;
 }

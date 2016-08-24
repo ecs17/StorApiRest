@@ -13,24 +13,48 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
         }
     ];
     var indexToClose;
+    var indexProdToDelete;
     
     $scope.selectedProduct = function(object){
         var prodSelected = object.originalObject;
-        _.findWhere($scope.tabsSale, {active: true}).listProductsToSales.push({
-            _id: prodSelected._id,
-            bar_code: prodSelected.bar_code,
-            name_prod: prodSelected.name_prod,
-            sale_price: prodSelected.price.sale_price,
-            quantity: 1,
-            amount: prodSelected.price.sale_price
-        });
-        getTotlaSales(_.findWhere($scope.tabsSale, {active: true}));
+        var prodAlreadyExist = false;
+        if(prodSelected.stocks === 0){
+            console.log("product stocks 0 with bar_code: " + prodSelected.bar_code);
+            $scope.modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'noStoksModal.html',
+                scope: $scope,
+                size: 'sm'
+            });
+        } else {
+            _.each(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales, function(prod, index){
+                if(prod.bar_code === prodSelected.bar_code){
+                    prod.quantity += 1
+                    prod.amount = prod.sale_price * prod.quantity;
+                    prodAlreadyExist = true;
+                }
+            });
+            if(!prodAlreadyExist){
+                _.findWhere($scope.tabsSale, {active: true}).listProductsToSales.push({
+                    _id: prodSelected._id,
+                    bar_code: prodSelected.bar_code,
+                    name_prod: prodSelected.name_prod,
+                    sale_price: _.isUndefined(prodSelected.price) ? prodSelected.price : prodSelected.price.sale_price,
+                    quantity: 1,
+                    amount: prodSelected.price.sale_price
+                });
+            }
+            getTotlaSales(_.findWhere($scope.tabsSale, {active: true}));
+        }
     }
     
     $scope.loadProducts = function (str) {
         if (str.length > 0) {
             Product.getSearch(str).success(function (data) {
                 $scope.productList = data;
+                if($scope.productList.length == 1 && $scope.productList[0].bar_code == str){
+                    $('#ex4_value').keyup();
+                }
             });
         }
     }
@@ -95,6 +119,7 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
 
     $scope.cancel = function () {
         $scope.modalInstance.dismiss('cancel');
+        $('#ex4_value').focus();
     };
     
     var getTotlaSales = function(tabSalesActive){
@@ -102,9 +127,47 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
         _.each(tabSalesActive.listProductsToSales, function(productToSales){
             total = total + productToSales.amount;
         });
-        tabSalesActive.subTotal = total;
-        tabSalesActive.totalSales = total;
+        tabSalesActive.subTotal = total.toFixed(2);
+        tabSalesActive.totalSales = total.toFixed(2);
     }
+
+    $scope.cantProd = function(){
+        console.log($event);
+    }
+
+    $scope.deletProductFromListSales = function(idxProd){
+        indexProdToDelete = idxProd;
+        console.log("Removing product: " + indexProdToDelete);
+        $scope.modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'confirmDeleteProdSalesModal.html',
+            scope: $scope,
+            size: 'sm'
+        });
+    }
+
+    $scope.removeProd = function(){
+        _.findWhere($scope.tabsSale, {active: true}).listProductsToSales.splice(indexProdToDelete, 1);
+        $scope.modalInstance.dismiss('ok');
+        $('#ex4_value').focus();
+    }
+
+    document.addEventListener('keydown', function(event){
+        if(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales.length > 0){
+            var idInput = (_.last(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales)).bar_code
+        }
+        if($('#ex4_value').is(':focus')){
+            if(event.which === 118){
+                $('#'+idInput).focus();
+            } 
+        }
+        if($('.quatity').is(':focus')){
+            if(event.which === 13){
+                $('#ex4_value').focus();
+            }
+        }
+    });
+
     /*$scope.openModal = function(){
         $scope.$state = $state;
         var left = screen.width / 2 - 200, top = screen.height / 2 - 250;

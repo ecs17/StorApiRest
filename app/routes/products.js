@@ -103,9 +103,9 @@ module.exports = function(app, express){
     
     apiRouter.route('/product/search/:search')
         .get(function(req, res){
-            console.log(req.params.search);
+            //console.log(req.params.search);
             var re = new RegExp('^'+req.params.search, 'i');
-            var query = [{'bar_code': req.params.search}, {'cv_product': {$regex: re}}, {'name_prod': {$regex: re}}, {'desc_prod': {$regex: re}}];
+            var query = [{'bar_code': {$regex: re}}, {'cv_product': {$regex: re}}, {'name_prod': {$regex: re}}, {'desc_prod': {$regex: re}}];
             Product.find().or(query).exec(function(err, products){
                 if(err) res.send(err);
                 
