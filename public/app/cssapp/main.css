@@ -45,3 +45,12 @@
 .col-name {
     width: 500px !important;
 }
+
+.modal-md  .modal-dialog{
+    width: 700px;
+    height: 600px;
+}
+
+.credit-input{
+    margin: 10px !important;
+}

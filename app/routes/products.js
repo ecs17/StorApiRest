@@ -1,6 +1,6 @@
 var Product = require('../models/data/product');
 
-module.exports = function(app, express){
+module.exports = function(app, express, _){
     var apiRouter = express.Router();
     
     apiRouter.route('/product')
@@ -113,5 +113,21 @@ module.exports = function(app, express){
             })
         });
         
+    apiRouter.route('/products/updatestok')
+        .put(function(req, res){
+            _.each(req.body, function(prod){
+                Product.findById(prod._id, function(err, producto){
+                    if(err) res.send(err);
+                    producto.stocks = producto.stocks - prod.quantity;
+                    producto.save(function(err){
+                        if(err) res.send(err);
+                    });
+                });
+            });
+            res.json({
+                    message: 'Productos actualizados con exito',
+                    status: 'success'
+                });
+        });
     return apiRouter;
 }

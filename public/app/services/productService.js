@@ -26,6 +26,10 @@ angular.module('productService', ['ngResource'])
     productFactory.getSearch = function(anyField){
         return $http.get('/api/product/search/' + anyField);
     }
+
+    productFactory.updateStokProducts = function(listProductsToSales){
+        return $http.put('/api/products/updatestok', listProductsToSales);
+    }
     
     return productFactory;
 }])

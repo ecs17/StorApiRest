@@ -66,6 +66,15 @@ angular.module('BarCodeValidator', [])
                     else
                         scope.product.price.sale_price = oldValue;
                 }
+            });	
+			scope.$watch('payWith', function(newValue,oldValue) {
+                check(newValue);
+                if (isNaN(newValue)) {
+                    if(typeof newValue === 'undefined')
+                        scope.payWith = '';
+                    else
+                        scope.payWith = oldValue;
+                }
             });
             function check(newValue){
                 var arr = String(newValue).split("");

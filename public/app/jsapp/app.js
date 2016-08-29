@@ -1,5 +1,7 @@
 'use strict';
-angular.module('casantApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'authService', 'mainCtrl', 'userService', 'catalogService', 'ngTable', 'BarCodeValidator', 'DinamicTab', 'productService', 'angucomplete-alt']);
+angular.module('casantApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'authService', 'mainCtrl', 'userService',
+    'catalogService', 'ngTable', 'BarCodeValidator', 'DinamicTab', 'productService', 'angucomplete-alt', 'salesService',
+    'clientService', 'creditService']);
 
 angular.module('casantApp').config(function($httpProvider){
     $httpProvider.interceptors.push('AuthInterceptor');

@@ -1,10 +1,11 @@
-function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, $uibModal, $log) {
+function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, $uibModal, $log, Sale, Client, Credit) {
 
     $scope.tabsSale = [
         {
             id: "tab1",
             name: "Venta 1",
             active: true,
+            hasProducts: false,
             title: "Venta numero 1",
             listProductsToSales: [],
             subTotal: 0.0,
@@ -14,12 +15,23 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
     ];
     var indexToClose;
     var indexProdToDelete;
+
+    $scope.isCredit = false;
     
     $scope.selectedProduct = function(object){
         var prodSelected = object.originalObject;
         var prodAlreadyExist = false;
+        console.log(_.findWhere(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales, {bar_code: prodSelected.bar_code}));
         if(prodSelected.stocks === 0){
             console.log("product stocks 0 with bar_code: " + prodSelected.bar_code);
+            $scope.modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'noStoksModal.html',
+                scope: $scope,
+                size: 'sm'
+            });
+        } else if(_.findWhere(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales, {bar_code: prodSelected.bar_code}) !== undefined
+                    && (prodSelected.stocks - _.findWhere(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales, {bar_code: prodSelected.bar_code}).quantity) === 0) {
             $scope.modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'noStoksModal.html',
@@ -31,6 +43,7 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                 if(prod.bar_code === prodSelected.bar_code){
                     prod.quantity += 1
                     prod.amount = prod.sale_price * prod.quantity;
+                    prod.stocks = prodSelected.stocks;
                     prodAlreadyExist = true;
                 }
             });
@@ -41,8 +54,12 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                     name_prod: prodSelected.name_prod,
                     sale_price: _.isUndefined(prodSelected.price) ? prodSelected.price : prodSelected.price.sale_price,
                     quantity: 1,
-                    amount: prodSelected.price.sale_price
+                    amount: prodSelected.price.sale_price,
+                    stocks: prodSelected.stocks
                 });
+            }
+            if(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales.length > 0){
+                _.findWhere($scope.tabsSale, {active: true}).hasProducts = true;
             }
             getTotlaSales(_.findWhere($scope.tabsSale, {active: true}));
         }
@@ -55,6 +72,37 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                 if($scope.productList.length == 1 && $scope.productList[0].bar_code == str){
                     $('#ex4_value').keyup();
                 }
+            });
+        }
+    }
+
+    $scope.selectedClient = function(object){
+        var clientSelected = object.originalObject;
+        $scope.clientDetail = {
+            name: "",
+            idClient: 0,
+            amountActual: 0,
+            debit: 0
+        }
+        Credit.getByidClient(clientSelected.idClient).success(function(data){
+            var credit = data;
+            console.log(credit)
+            var cd =  {
+                name: clientSelected.name + ' ' + clientSelected.ap1 + ' ' + clientSelected.ap2,
+                idClient: clientSelected.idClient,
+                idCredit: credit.length > 0 ? credit[0].idCredit : 0, 
+                amountActual: parseFloat(_.findWhere($scope.tabsSale, {active: true}).totalSales),
+                debit: credit.length > 0 ? credit[0].amountCredit : 0
+            }
+            $scope.clientDetail = cd;
+        });
+        
+    }
+
+    $scope.loadClients = function (str) {
+        if (str.length > 0) {
+            Client.getSearch(str).success(function (data) {
+                $scope.clientList = data;
             });
         }
     }
@@ -76,6 +124,7 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
             id: "tab"+id,
             name: "Venta " + id,
             active: true,
+            hasProducts: false,
             title: "Venta numero " +id,
             listProductsToSales: [],
             subTotal: 0.0,
@@ -90,8 +139,18 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
     };
     
     $scope.changeQuantity = function(prodRow, tab){
-        prodRow.amount = prodRow.quantity * prodRow.sale_price;
-        getTotlaSales(tab);
+        if((prodRow.stocks - prodRow.quantity) < 0){
+            prodRow.quantity = prodRow.stocks;
+            $scope.modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'noStoksModal.html',
+                scope: $scope,
+                size: 'sm'
+            });
+        } else {
+            prodRow.amount = prodRow.quantity * prodRow.sale_price;
+            getTotlaSales(tab);
+        }
     };
     
     $scope.removeTab = function (i, nameSale) {
@@ -149,12 +208,135 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
     $scope.removeProd = function(){
         _.findWhere($scope.tabsSale, {active: true}).listProductsToSales.splice(indexProdToDelete, 1);
         $scope.modalInstance.dismiss('ok');
+        if(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales.length == 0){
+            _.findWhere($scope.tabsSale, {active: true}).hasProducts = false;
+        }
+        $('#ex4_value').focus();
+    }
+
+    $scope.collect = function(){
+        console.log("Cobrar  Productos");
+        $scope.amountComplete = false;
+        $scope.payWrong = false;
+        $scope.tSale = parseFloat(_.findWhere($scope.tabsSale, {active: true}).totalSales);
+        $scope.payWith = 0;
+        $scope.cambio = 0;
+        $scope.isCredit = false;
+        $scope.clientDetail = {
+            name: "",
+            idClient: 0,
+            amountActual: 0,
+            debit: 0
+        }
+        $scope.modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'confirmCollectModal.html',
+            scope: $scope,
+            windowClass: 'modal-md'
+        });
+        $('#fieldPayWith').focus();
+    }
+
+    $scope.changePay = function(amount){
+        $scope.payWith = parseFloat(amount);
+        $scope.payWrong = false;
+        $scope.clientDetail.amountActual = ($scope.tSale - $scope.payWith < 0 ? 0 : $scope.tSale - $scope.payWith);
+        if(amount >= $scope.tSale){
+            $scope.amountComplete = true;
+            $scope.cambio = $scope.payWith - $scope.tSale;
+        } else {
+            $scope.amountComplete = false;
+            $scope.cambio = 0;
+        }
+    }
+
+    $scope.closeAlert = function() {
+        $scope.payWrong = false;
+    }
+
+    $scope.typeSale = function(iscred){
+        $scope.isCredit = iscred;
+    }
+
+    $scope.finishSale = function(){
+        if(!$scope.isCredit){
+            if($scope.amountComplete){
+                $scope.saveSaleAndUpdateStoks();
+            } else {
+                $scope.payWrong = true;
+            }
+        } else {
+            $scope.modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'confirmSaleCredit.html',
+                scope: $scope,
+                size: 'sm'
+            });
+        }
+    }
+
+    $scope.saveSaleAndUpdateStoks = function(){
+        $scope.modalInstance.dismiss('ok');
+        Product.updateStokProducts(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales).success(function(data){
+            console.log(data.message);
+            if(data.status === 'success'){
+                var sale = {
+                    idUser: 1,
+                    idClient: 1,
+                    comments: '',
+                    typeSale: 1,
+                    amountSale: $scope.tSale,
+                    listProductsToSales: _.findWhere($scope.tabsSale, {active: true}).listProductsToSales
+                };
+                Sale.saveSale(sale).success(function(data){
+                    console.log(data.message);
+                    if(data.status === 'success'){
+                        _.findWhere($scope.tabsSale, {active: true}).listProductsToSales = [];
+                        if($scope.isCredit){
+                            if($scope.clientDetail.idCredit === 0){
+                                var credit = {
+                                    amountCredit: $scope.clientDetail.debit + $scope.clientDetail.amountActual,
+                                    idClient: $scope.clientDetail.idClient,
+                                    detailCredit: [{idSale: data.idSale}]
+                                }
+                                Credit.saveCredir(credit).success(function(dataCredit){
+                                    console.log(dataCredit.message);
+                                });
+                            } else {
+                                var credit = {
+                                    idCredit: $scope.clientDetail.idCredit,
+                                    amountCredit: $scope.clientDetail.debit + $scope.clientDetail.amountActual,
+                                    idClient: $scope.clientDetail.idClient,
+                                    detailCredit: [{idSale: data.idSale}]
+                                }
+                                Credit.update($scope.clientDetail.idCredit, credit).success(function(dataCredit){
+                                    console.log(dataCredit.message);
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        $scope.modalInstance.dismissAll();
+        $scope.payWith = 0;
+        $scope.cambio = 0;
+        $('#ex4_value').focus();
+    }
+
+    $scope.cancelCobro = function(){
+        $scope.modalInstance.dismiss('cancel');
+        $scope.payWith = 0;
+        $scope.cambio = 0;
         $('#ex4_value').focus();
     }
 
     document.addEventListener('keydown', function(event){
         if(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales.length > 0){
             var idInput = (_.last(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales)).bar_code
+            if(event.which === 119){
+                 $scope.collect();
+            }
         }
         if($('#ex4_value').is(':focus')){
             if(event.which === 118){

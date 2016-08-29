@@ -5,6 +5,7 @@ var morgan = require('morgan');
 var mongoose = require('mongoose');
 var config = require('./config');
 var path = require('path');
+var _ = require("underscore");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -23,11 +24,17 @@ app.use(express.static(__dirname + '/public'));
 
 var usersTypeCatalogRouter = require('./app/routes/catalogs')(app, express);
 var usersRouter = require('./app/routes/users')(app, express);
-var productsRouter = require('./app/routes/products')(app, express);
+var productsRouter = require('./app/routes/products')(app, express, _);
+var salesRouter = require('./app/routes/sales')(app, express, _);
+var clientRouter = require('./app/routes/clients')(app, express, _);
+var creditRouter = require('./app/routes/credits')(app, express, _);
 
 app.use('/api', usersRouter);
 app.use('/api', productsRouter);
 app.use('/api', usersTypeCatalogRouter);
+app.use('/api', salesRouter);
+app.use('/api', clientRouter);
+app.use('/api', creditRouter);
 
 app.get('*', function(req, res){
     res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
