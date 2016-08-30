@@ -46,7 +46,6 @@ module.exports = function(app, express, _){
             Credit.find().and([{'idClient': req.params.idClient}, {'statusCredit': true}]).exec(function(err, credit){
                 if(err) res.send(err);
                 
-                console.log(credit);
                 res.json(credit);
             });
         });

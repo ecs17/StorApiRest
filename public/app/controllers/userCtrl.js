@@ -11,16 +11,17 @@ function UserCtrl($rootScope, User, $scope, $state, $window, $filter, ngTablePar
         loadTable($scope, $filter, $scope.users, ngTableParams);
     });
     
-    $scope.deleteUser = function(id){
-        $scope.processing = true;
-        
-        User.delete(id).success(function(data){
-            User.all().success(function(data){
-                $scope.processing = false;
-                $scope.users = data;
-                loadTable($scope, $filter, $scope.users, ngTableParams);
+    $scope.deleteUser = function(id, disableDelet){
+        if(!disableDelet){
+            $scope.processing = true;
+            User.delete(id).success(function(data){
+                User.all().success(function(data){
+                    $scope.processing = false;
+                    $scope.users = data;
+                    loadTable($scope, $filter, $scope.users, ngTableParams);
+                });
             });
-        });
+        }
     };
 }
 

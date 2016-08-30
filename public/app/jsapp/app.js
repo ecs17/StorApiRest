@@ -7,6 +7,33 @@ angular.module('casantApp').config(function($httpProvider){
     $httpProvider.interceptors.push('AuthInterceptor');
 });
 
+angular.module('casantApp').run(function($rootScope, $uibModal, $state) {
+    $rootScope.modal = true;
+
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+        if(fromState.name === 'startSale'){
+            console.log("Change State")
+            if ($rootScope.modal) {
+                event.preventDefault();
+                $rootScope.modal = false;
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'app/views/pages/templates/modalChange.html'
+                });
+
+                modalInstance.result.then(function(selectedItem) {
+                    console.log('changing state to:'+ toState.name);
+                    $state.go(toState, {}, {reload:true});
+                }, function() {
+                    console.log('going back to state:'+ fromState.name);
+                    $state.go(fromState, {}, {reload:false});
+                });
+            } else {
+                $rootScope.modal = true;
+            }
+        }
+    })
+});
+
 angular.module('casantApp').config(
     ['$stateProvider', '$urlRouterProvider',
         function($stateProvider, $urlRouterProvider) {

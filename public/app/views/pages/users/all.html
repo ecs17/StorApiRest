@@ -29,7 +29,7 @@
                 </td>
                 <td>
                     <a ui-sref="edituser({userId: user._id})" title="Actualizar Usuario" class="btn btn-primary" ng-disabled="{{user.userName == userNow.userName}}"><i class="fa fa-pencil"></i></a>
-                    <a href="#" ng-click="deleteUser(user._id)" title="Eliminar Usuario" class="btn btn-danger" ng-disabled="{{user.userName == userNow.userName}}"><i class="fa fa-user-times"></i></a>
+                    <a href="#" ng-click="deleteUser(user._id, (user.userName == userNow.userName))" title="Eliminar Usuario" class="btn btn-danger" ng-disabled="{{user.userName == userNow.userName}}"><i class="fa fa-user-times"></i></a>
                 </td>
             </tr>
         </table>

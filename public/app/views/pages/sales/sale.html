@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <a class="btn btn-primary btn-lg" href="" ng-disabled="!tab.hasProducts" ng-click="collect()" title="Cobrar" ><i class="fa fa-check fa-lg" aria-hidden="true"></i> Cobrar (F2)</a>
+                    <a class="btn btn-primary btn-lg" href="" ng-disabled="!tab.hasProducts" ng-click="collect()" title="Cobrar" ><i class="fa fa-check fa-lg" aria-hidden="true"></i> Cobrar (F8)</a>
                     <a class="btn btn-danger btn-lg" href="" title="Cancelar Venta" ><i class="fa fa-times fa-lg" aria-hidden="true"></i> Cancelar Venta (F4)</a>
                 </div>
                 <div class="col-md-4 col-md-offset-3">
@@ -140,7 +140,7 @@
 </script>
 <script type="text/ng-template" id="confirmCollectModal.html">
     <div class="modal-header">
-        <div uib-alert ng-class="'alert-warning'" dismiss-on-timeout="5000" close="closeAlert()" ng-show="payWrong">No se puede saldar la cuenta, el monto con que se paga es menor al adeudo</div>
+        <div uib-alert ng-class="'alert-warning'" dismiss-on-timeout="10000" close="closeAlert()" ng-show="payWrong">No se puede saldar la cuenta, el monto con que se paga es menor al adeudo</div>
         <h3 class="modal-title">Cobrar</h3>
     </div>
     <div class="modal-body">
@@ -176,7 +176,11 @@
                 <input class="credit-input" type="checkbox" ng-model="isCredit" ng-click="typeSale(isCredit)"/>
             </div>
         </div>
+        <hr>
         <div class="row" ng-show="isCredit">
+            <div class="col-sm-12">
+                <div uib-alert ng-class="'alert-warning'" dismiss-on-timeout="10000" close="closeAlertMissClient()" ng-show="clientEmpty">Debes Capturar y seleccionar el clienta al que se le asignara la venta</div>
+            </div>
             <div class="col-sm-12">
                 <div class="col-sm-10">
                     <div angucomplete-alt id="client" placeholder="Captura Nombre del cliente" pause="100" selected-object="selectedClient" local-data="clientList" search-fields="name,ap1,ap2" title-field="name,ap1,ap2" description-field="name" minlength="1" input-class="form-control form-control-small" match-class="highlight-similar" override-suggestions="true" clear-selected="true" input-changed="loadClients" auto-match="true">
@@ -210,7 +214,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="finishSale()">Cobrar</button>
+        <button class="btn btn-primary" type="button" ng-click="finishSale()"><i class="fa fa-money" aria-hidden="true"></i> Cobrar</button>
+        <button class="btn btn-success" type="button" ng-click="finishSale()"><i class="fa fa-money" aria-hidden="true"></i> <i class="fa fa-print" aria-hidden="true"></i> Cobrar e Imprimir Tiket</button>
         <button class="btn btn-warning" type="button" ng-click="cancelCobro()">Cancelar</button>
     </div>
 </script>
