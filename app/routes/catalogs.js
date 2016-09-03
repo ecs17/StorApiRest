@@ -1,6 +1,7 @@
 var UserTypeCatalog = require('../models/catalogs/catlg_UserType');
 var ProdPresCatalog = require('../models/catalogs/catlg_ProdPres');
 var MeasureTypeCatalog = require('../models/catalogs/catlg_MeasureType');
+var ClientTypeCatalog = require('../models/catalogs/catlg_ClientType');
 
 module.exports = function(app, express){
     var apiRouter = express.Router();
@@ -28,6 +29,33 @@ module.exports = function(app, express){
                 if(err) res.send(err);
 
                 res.json(userTC);
+            })
+        });
+    
+    apiRouter.route('/clientTypeCatalog')
+        .post(function(req, res){
+            var catalog = new ClientTypeCatalog();
+
+            catalog.abbrev = "Test";
+            catalog.description = "Test";
+            catalog.idType = 6;
+
+            catalog.save(function(err){
+                if(err){
+                    if(err.code == 11000)
+                        return res.json({success: false, message: 'A client with that\ username already exists'});
+
+                    else
+                        return res.send(err)
+                }
+                res.json({message: 'Client created!'});
+            })
+        })
+        .get(function(req, res){
+            ClientTypeCatalog.find(function(err, clientTC){
+                if(err) res.send(err);
+
+                res.json(clientTC);
             })
         });
     

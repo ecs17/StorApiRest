@@ -1,0 +1,39 @@
+<div class="page-header">
+    <h1>
+        Clientes
+        <a ui-sref="createclient" class="btn btn-default">
+            <i class="fa fa-plus"></i>
+            Nuevo Cliente
+        </a>
+    </h1>
+</div>
+<div class="jumbotron text-center" ng-show="processing">
+    <i class="fa fa-repeat spinner"></i>
+    <p>Cargando Clientes.......</p>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <p>Filtro:
+            <input class="form-control" type="text" ng-model="filter.$" />
+        </p>
+        <div class="table-responsive">
+            <table ng-table="tableParams" class="table">
+            <tr ng-repeat="client in $data">
+                <td data-title="'Nombre'" sortable="'name'">
+                    {{client.name}} {{client.ap1}} {{client.ap2}}
+                </td>
+                <td data-title="'Telefono'" sortable="'userName'">
+                    {{client.phone}}
+                </td>
+                <td data-title="'Estatus Cliente'" sortable="'userType.description'">
+                    {{client.clientType.description}}
+                </td>
+                <td>
+                    <a ui-sref="editclient({idClient: client._id})" title="Actualizar Cliente" class="btn btn-primary" ng-disabled="!client.edit"><i class="fa fa-pencil"></i></a>
+                    <a href="#" ng-click="deleteClient(client._id, client.edit)" title="Eliminar Cliente" class="btn btn-danger" ng-disabled="!client.edit"><i class="fa fa-user-times"></i></a>
+                </td>
+            </tr>
+        </table>
+        </div>
+    </div>
+</div>

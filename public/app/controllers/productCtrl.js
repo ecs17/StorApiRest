@@ -1,7 +1,10 @@
-function ProductCtrl($rootScope, $scope, Product, $window, $filter, ngTableParams){
+function ProductCtrl($rootScope, $scope, Product, $window, $filter, $state, ngTableParams){
     $scope.processing = true;
     $scope.products = {}
     //$rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    if($rootScope.userNow.type === undefined){
+        $state.go('login');
+    }
     Product.all().success(function(data){
         $scope.processing = false;
         $scope.products = data;
@@ -21,6 +24,9 @@ function ProductCtrl($rootScope, $scope, Product, $window, $filter, ngTableParam
     };
 }
 function CreateProductCtrl($rootScope, $scope, ProductPres, MeasureType, Product, $state) {
+    if($rootScope.userNow.type === undefined){
+        $state.go('login');
+    }
     $scope.product = {
         stocks: '',
         taxes: {
@@ -103,6 +109,9 @@ function AddStocksCtrl($rootScope, $scope, Product, $window, $filter, ngTablePar
     $scope.prodTemp = {};
     $scope.oldProd = {};
     //$rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    if($rootScope.userNow.type === undefined){
+        $state.go('login');
+    }
     Product.all().success(function(data){
         $scope.processing = false;
         $scope.products = data;
@@ -147,6 +156,9 @@ function AddStocksCtrl($rootScope, $scope, Product, $window, $filter, ngTablePar
 }
 
 function EditProductCtrl($scope, $stateParams, Product, $window, ProductPres, MeasureType, $state){
+    if($rootScope.userNow.type === undefined){
+        $state.go('login');
+    }
     var flagTax = false;
     var flagPrc = false;
     $scope.priceInvalid = false;

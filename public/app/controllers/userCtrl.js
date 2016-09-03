@@ -1,9 +1,12 @@
 function UserCtrl($rootScope, User, $scope, $state, $window, $filter, ngTableParams){
     $scope.processing = true;
     $scope.users = {}
-    $rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
-    if($rootScope.userNow.type.idType !== 1){
+    //$rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    if($rootScope.userNow.type === undefined || $rootScope.userNow.type.idType !== 1){
         $state.go('nopermission');
+    }
+    if($rootScope.userNow.type === undefined){
+        $state.go('login');
     }
     User.all().success(function(data){
         $scope.processing = false;
@@ -26,9 +29,12 @@ function UserCtrl($rootScope, User, $scope, $state, $window, $filter, ngTablePar
 }
 
 
-function CreateUserCtrl($rootScope, $scope, User, UserType, $window){
+function CreateUserCtrl($rootScope, $scope, User, UserType, $window, $state){
     $scope.type = 'create';
-    $rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    //$rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    if($rootScope.userNow.type === undefined){
+        $state.go('login');
+    }
     UserType.get().success(function(data){
         $scope.userTypeCatalog = data;
     })
@@ -57,7 +63,10 @@ function CreateUserCtrl($rootScope, $scope, User, UserType, $window){
 
 function EditUserCtrl($rootScope, $scope, $state, $stateParams, User, UserType, $window){
     $scope.type = 'edit';
-    $rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    //$rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    if($rootScope.userNow.type === undefined){
+        $state.go('login');
+    }
     UserType.get().success(function(data){
         $scope.userTypeCatalog = data;
     });

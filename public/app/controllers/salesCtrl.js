@@ -1,5 +1,9 @@
 function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, $uibModal, $log, Sale, Client, Credit) {
 
+    //$rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+    if($rootScope.userNow.type === undefined){
+        $state.go('login');
+    }
     $scope.tabsSale = [
         {
             id: "tab1",
@@ -91,6 +95,8 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
             var cd =  {
                 name: clientSelected.name + ' ' + clientSelected.ap1 + ' ' + clientSelected.ap2,
                 idClient: clientSelected.idClient,
+                _id: clientSelected._id,
+                clientType: clientSelected.clientType,
                 idCredit: credit.length > 0 ? credit[0].idCredit : 0, 
                 amountActual: parseFloat(_.findWhere($scope.tabsSale, {active: true}).totalSales),
                 debit: credit.length > 0 ? credit[0].amountCredit : 0
@@ -259,7 +265,7 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
     }
 
     $scope.closeAlertMissClient = function() {
-        $scope.clientEmpty = true;
+        $scope.clientEmpty = false;
     }
 
     $scope.typeSale = function(iscred){
@@ -319,6 +325,12 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                                 }
                                 Credit.saveCredir(credit).success(function(dataCredit){
                                     console.log(dataCredit.message);
+                                    if($scope.clientDetail.clientType.idType !== 2){
+                                        Client.updateStatusToCredit($scope.clientDetail.idClient).success(function(data){
+                                            console.log(data.message)
+                                        })
+                                    }
+                                    console.log($scope.clientDetail)
                                 });
                             } else {
                                 var credit = {

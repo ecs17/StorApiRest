@@ -92,6 +92,19 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-user"></i>  Admon. de Clientes <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a ui-sref="clients"><i class="fa fa-search"></i><i class="fa fa-user"></i> Ver Clientes</a>
+                            </li>
+                            <li ng-if="userNow.type.idType == 1">
+                                <a ui-sref="createclient"><i class="fa fa-user-plus"> Nuevo Cliente </i></a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -117,6 +130,7 @@
     <script src="app/controllers/userCtrl.js"></script>
     <script src="app/controllers/productCtrl.js"></script>
     <script src="app/controllers/salesCtrl.js"></script>
+    <script src="app/controllers/clientCtrl.js"></script>
     <!--        <script src="app/controllers/loginCtrl.js"></script>-->
     <script src="app/services/authService.js"></script>
     <script src="app/services/userService.js"></script>

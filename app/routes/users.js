@@ -51,7 +51,7 @@ module.exports = function(app, express){
     });
     
     apiRouter.use(function(req, res, next){
-        console.log('Somebody just came to our app!');
+        console.log('Somebody just came to our app!' + req);
         var token = req.body.token || req.param('token') || req.headers['x-access-token'];
         if(token){
             jwt.verify(token, superSecret, function(err, decoded){

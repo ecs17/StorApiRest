@@ -7,11 +7,14 @@ angular.module('casantApp').config(function($httpProvider){
     $httpProvider.interceptors.push('AuthInterceptor');
 });
 
-angular.module('casantApp').run(function($rootScope, $uibModal, $state) {
+angular.module('casantApp').run(function($rootScope, $uibModal, $state, $window) {
     $rootScope.modal = true;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-        if(fromState.name === 'startSale'){
+        $rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
+        if($rootScope.userNow.type === undefined && toState.name !== 'login'){
+            $state.go('login');
+        } else if(fromState.name === 'startSale' && $rootScope.userNow.type !== undefined){
             console.log("Change State")
             if ($rootScope.modal) {
                 event.preventDefault();
@@ -91,6 +94,21 @@ angular.module('casantApp').config(
                 url: '/sale',
                 templateUrl: 'app/views/pages/sales/sale.html',
                 controller: SaleCtrl
+            })
+            .state('clients', {
+                url: '/clients',
+                templateUrl: 'app/views/pages/clients/all.html',
+                controller: ClientCtrl
+            })
+            .state('createclient', {
+                url: '/createclient',
+                templateUrl: 'app/views/pages/clients/newAndUpdate.html',
+                controller: CreateClientCtrl
+            })
+            .state('editclient', {
+                url: '/editClient/:idClient',
+                templateUrl: 'app/views/pages/clients/newAndUpdate.html',
+                controller: EditClientCtrl
             })
             .state('nopermission', {
                 url: 'noPermission',

@@ -1,0 +1,94 @@
+<div class="page-header">
+    <h1 ng-if="typeTask == 'create'">Agregar Nuevo Cliente</h1>
+    <h1 ng-if="typeTask == 'edit'">Editar Cliente Existente</h1>
+</div>
+<form class="form-horizontal" ng-submit="saveClient()">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Nombre</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" ng-model="clientData.name" required placeholder="Ingresa el nombre del cliente">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Apellido 1</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="clientData.ap1" required placeholder="Captura el Apellido 1">
+        </div>
+        <label class="col-sm-2 control-label">Apellido 2</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="clientData.ap2" placeholder="Captura el Apellido 2">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Calle</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" ng-model="clientData.street" placeholder="Captura la calle">
+        </div>
+        <label class="col-sm-2 control-label">No.</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" ng-model="clientData.num" placeholder="Numero">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Colonia</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="clientData.col" placeholder="Captura la colonia">
+        </div>
+        <label class="col-sm-2 control-label">Municipio</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="clientData.mun" placeholder="Municipio">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Estado</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="clientData.ent" placeholder="Captura el estado">
+        </div>
+        <label class="col-sm-2 control-label">Codigo Postal</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="clientData.cp" placeholder="Captura el Codigo Postal">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Telefono</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="clientData.phone" placeholder="Captura el telefono">
+        </div>
+        <label class="col-sm-2 control-label">RFC</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="clientData.rfc" placeholder="Captura el RFC">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Edad</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="clientData.age" placeholder="Captura la edad">
+        </div>
+        <label class="col-sm-2 control-label">Estatus</label>
+        <div class="col-sm-4">
+            <select class="form-control" ng-model="client_type" ng-options="ct.description for ct in clientType" required>
+                <option value="">Selecciona el estatus</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Comentarios del Cliente</label>
+        <div class="col-sm-10">
+            <textarea rows="4" cols="100" ng-model="clientData.coments"></textarea>
+        </div>
+    </div>
+    <hr>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-6">
+            <button type="submit" class="btn btn-success btn-lg btn-block" ng-if="typeTask == 'create'">Crear Cliente</button>
+            <button type="submit" class="btn btn-success btn-lg btn-block" ng-if="typeTask == 'edit'">Actualizar Cliente</button>
+        </div>
+    </div>
+</form>
+<div class="row show-hide-message" ng-show="message">
+    <div class="col-sm-6 col-sm-offset-2">
+        <div class="alert alert.info">
+            {{message}}
+        </div>
+    </div>
+</div>
