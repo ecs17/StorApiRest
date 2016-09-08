@@ -14,7 +14,8 @@ var CreditsSchema = new Schema({
     statusCredit: {type: Boolean, required: true},
     detailCredit: [
         {
-            idSale: {type: Number, required: true}
+            idSale: {type: Number, required: true},
+            payment: Number
         }
     ]
 });

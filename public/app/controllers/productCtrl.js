@@ -155,7 +155,7 @@ function AddStocksCtrl($rootScope, $scope, Product, $window, $filter, ngTablePar
     };
 }
 
-function EditProductCtrl($scope, $stateParams, Product, $window, ProductPres, MeasureType, $state){
+function EditProductCtrl($rootScope, $scope, $stateParams, Product, $window, ProductPres, MeasureType, $state){
     if($rootScope.userNow.type === undefined){
         $state.go('login');
     }

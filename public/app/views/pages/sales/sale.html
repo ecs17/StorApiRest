@@ -48,14 +48,14 @@
                                     <th>Importe</th>
                                 </tr>
                             </thead>
-                            <tbody style="height:200px">
+                            <tbody style="height:250px">
                                 <tr ng-repeat="productRow in tab.listProductsToSales">
                                     <td class="col-delete"><a href="" class="btn btn-danger btn-sm" title="Cancelar producto en venta" ng-click="deletProductFromListSales($index)"><i class="fa fa-times"></i></a></td>
                                     <td>{{productRow.bar_code}}</td>
                                     <td>{{productRow.name_prod}}</td>
                                     <td>{{productRow.sale_price.toFixed(2)}}</td>
                                     <td class="col-xs-1">
-                                        <input id="{{productRow.bar_code}}" type="number" class="form-control quatity" min="0.01" step="any" ng-change="changeQuantity(productRow, tab)" ng-model="productRow.quantity">
+                                        <input id="{{productRow.bar_code}}" class="form-control quatity" ng-change="changeQuantity(productRow, tab)" quantity ng-model="productRow.quantity">
                                     </td>
                                     <td>{{productRow.amount.toFixed(2)}}</td>
                                 </tr>
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <a class="btn btn-primary btn-lg" href="" ng-disabled="!tab.hasProducts" ng-click="collect()" title="Cobrar" ><i class="fa fa-check fa-lg" aria-hidden="true"></i> Cobrar (F8)</a>
+                    <a class="btn btn-primary btn-lg" href="" ng-disabled="!tab.hasProducts" ng-click="collect(tab.hasProducts)" title="Cobrar" ><i class="fa fa-check fa-lg" aria-hidden="true"></i> Cobrar (F8)</a>
                     <a class="btn btn-danger btn-lg" href="" title="Cancelar Venta" ><i class="fa fa-times fa-lg" aria-hidden="true"></i> Cancelar Venta (F4)</a>
                 </div>
                 <div class="col-md-4 col-md-offset-3">
@@ -141,6 +141,7 @@
 <script type="text/ng-template" id="confirmCollectModal.html">
     <div class="modal-header">
         <div uib-alert ng-class="'alert-warning'" dismiss-on-timeout="10000" close="closeAlert()" ng-show="payWrong">No se puede saldar la cuenta, el monto con que se paga es menor al adeudo</div>
+        <div uib-alert ng-class="'alert-danger'" dismiss-on-timeout="10000" close="closeAlertLimitCredit()" ng-show="limitWrong">Se sobrepaso el limite de credito del cliente por la cantidad de: $ {{overCharg}}</div>
         <h3 class="modal-title">Cobrar</h3>
     </div>
     <div class="modal-body">
@@ -209,6 +210,14 @@
                 </div>
                 <div class="col-sm-6">
                     <h4><span class="label label-info">{{clientDetail.debit.toFixed(2)}}</span></h4>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="col-sm-5">
+                    <h4>Limite de Credito: </h4>
+                </div>
+                <div class="col-sm-6">
+                    <h4><span class="label label-info">{{clientDetail.limitCredit.toFixed(2)}}</span></h4>
                 </div>
             </div>
         </div>

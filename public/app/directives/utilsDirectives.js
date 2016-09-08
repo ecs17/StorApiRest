@@ -18,6 +18,36 @@ angular.module('BarCodeValidator', [])
         }
     }
 }])
+.directive('quantity', function () {
+    return {
+		require: 'ngModel',
+        link: function (scope) {
+            scope.$watch('productRow.quantity', function(newValue, oldValue){
+                if(scope.productRow.typeMeasure === 1)
+                    scope.productRow.quantity = String(newValue).replace(/[^0-9]/g, '');
+                else
+                    checkFloat(newValue);
+
+                if (isNaN(newValue)) {
+                    if(typeof newValue === 'undefined')
+                        scope.productRow.quantity = '';
+                    else
+                        scope.productRow.quantity = oldValue;
+                }
+            });
+
+            function checkFloat(newValue){
+                var arr = String(newValue).split("");
+                if (arr.length === 0)
+                    return;
+                if (arr.length === 1 && (arr[0] == '-' || arr[0] === '.' )) 
+                    return;
+                if (arr.length === 2 && newValue === '-.') 
+                    return;
+            }
+        }
+    }
+})
 .directive('stoksNumber', function () {
 	return {
 		require: 'ngModel',

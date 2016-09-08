@@ -9,7 +9,7 @@ var SalesSchema = new Schema({
     dateSale: {type: Date, required: true},
     totalAmount: {type: Number, required: true},
     idClient: Number,
-    idUser: {type: Number, required: true},
+    idUser: {type: String, required: true},
     totalProducts: {type: Number, required: true},
     comments: String,
     typeSale: Number,

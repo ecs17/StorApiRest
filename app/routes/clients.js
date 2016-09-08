@@ -18,7 +18,7 @@ module.exports = function(app, express, _){
             client.ent = req.body.ent;
             client.cp = req.body.cp;
             client.rfc = req.body.rfc;
-            client.age = req.body.age;
+            client.limitCredit = parseFloat(req.body.limitCredit);
             client.coments = req.body.coments;
             client.clientType = req.body.clientType;
             
@@ -64,7 +64,7 @@ module.exports = function(app, express, _){
                 client.ent = req.body.ent;
                 client.cp = req.body.cp;
                 client.rfc = req.body.rfc;
-                client.age = req.body.age;
+                client.limitCredit = req.body.limitCredit;
                 client.coments = req.body.coments;
                 client.clientType = req.body.clientType;
 

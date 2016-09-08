@@ -30,7 +30,7 @@ module.exports = function(app, express, _){
             Credit.find({'idCredit': req.params.credit_id}, function(err, credit){
                 if(err) res.send(err);
                 credit[0].amountCredit = req.body.amountCredit;
-                credit[0].detailCredit.push({idSale: req.body.detailCredit[0].idSale})
+                credit[0].detailCredit.push({idSale: req.body.detailCredit[0].idSale, payment: req.body.detailCredit[0].payment})
                 credit[0].dateLastSale = new Date();
 
                 credit[0].save(function(err){

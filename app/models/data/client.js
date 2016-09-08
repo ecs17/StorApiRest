@@ -15,7 +15,7 @@ var ClientSchema = new Schema({
     num : String,
     phone: String,
     rfc: String,
-    age: String,
+    limitCredit: {type: Number, require: true},
     ent: String,
     mun: String,
     loc: String,

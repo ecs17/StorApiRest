@@ -1,3 +1,3 @@
-db.getCollection('clients').find({$and: [{$or: [{'name': {$regex: /^e/i}}, {'ap1': {$regex: /^e/i}}, {'ap2': {$regex: /^e/i}}]},
-                                           {'clientType.idType': 2}]})
+db.getCollection('clients').find({$and: [{$or: [{'name': {$regex: /^c/i}}, {'ap1': {$regex: /^c/i}}, {'ap2': {$regex: /^c/i}}]},
+                                           {'clientType.idType': {$in: [1,2]}}]})
                                                 

@@ -30,7 +30,7 @@
 }
 
 .div-table-content {
-    height:300px;
+    height:360px;
     overflow-y:auto;
 }
 
@@ -53,4 +53,9 @@
 
 .credit-input{
     margin: 10px !important;
+}
+
+body {
+    font-size: 12px !important;
+    line-height: 1 !important;
 }

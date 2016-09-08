@@ -60,7 +60,8 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                     sale_price: _.isUndefined(prodSelected.price) ? prodSelected.price : prodSelected.price.sale_price,
                     quantity: 1,
                     amount: prodSelected.price.sale_price,
-                    stocks: prodSelected.stocks
+                    stocks: prodSelected.stocks,
+                    typeMeasure: prodSelected.measure_type.idType
                 });
             }
             if(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales.length > 0){
@@ -87,6 +88,8 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
             name: "",
             idClient: 0,
             amountActual: 0,
+            payment: 0,
+            limitCredit: 0,
             debit: 0
         }
         Credit.getByidClient(clientSelected.idClient).success(function(data){
@@ -99,7 +102,8 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                 clientType: clientSelected.clientType,
                 idCredit: credit.length > 0 ? credit[0].idCredit : 0, 
                 amountActual: parseFloat(_.findWhere($scope.tabsSale, {active: true}).totalSales),
-                debit: credit.length > 0 ? credit[0].amountCredit : 0
+                debit: credit.length > 0 ? credit[0].amountCredit : 0,
+                limitCredit: clientSelected.limitCredit
             }
             $scope.clientDetail = cd;
         });
@@ -155,7 +159,13 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                 size: 'sm'
             });
         } else {
-            prodRow.amount = prodRow.quantity * prodRow.sale_price;
+            if(prodRow.typeMeasure === 1){
+                if(prodRow.quantity !== "" && String(prodRow.quantity).replace(/[^0-9]/g, '') == 0)
+                    prodRow.quantity = 1;
+                prodRow.amount = String(prodRow.quantity).replace(/[^0-9]/g, '') * prodRow.sale_price;
+            } else {
+                prodRow.amount = prodRow.quantity * prodRow.sale_price;
+            }
             getTotlaSales(tab);
         }
     };
@@ -223,34 +233,40 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
         $('#ex4_value').focus();
     }
 
-    $scope.collect = function(){
-        console.log("Cobrar  Productos");
-        $scope.amountComplete = false;
-        $scope.payWrong = false;
-        $scope.clientEmpty = false;
-        $scope.tSale = parseFloat(_.findWhere($scope.tabsSale, {active: true}).totalSales);
-        $scope.payWith = 0;
-        $scope.cambio = 0;
-        $scope.isCredit = false;
-        $scope.clientDetail = {
-            name: "",
-            idClient: 0,
-            amountActual: 0,
-            debit: 0
+    $scope.collect = function(activBtnCollect){
+        if(activBtnCollect){
+            console.log("Cobrar  Productos");
+            $scope.amountComplete = false;
+            $scope.payWrong = false;
+            $scope.limitWrong = false;
+            $scope.clientEmpty = false;
+            $scope.tSale = parseFloat(_.findWhere($scope.tabsSale, {active: true}).totalSales);
+            $scope.payWith = $scope.tSale;
+            $scope.cambio = 0;
+            $scope.isCredit = false;
+            $scope.clientDetail = {
+                name: "",
+                idClient: 0,
+                amountActual: 0,
+                payment: 0,
+                limitCredit: 0,
+                debit: 0
+            }
+            $scope.modalInstanceCollect = $uibModal.open({
+                animation: true,
+                templateUrl: 'confirmCollectModal.html',
+                scope: $scope,
+                windowClass: 'modal-md'
+            });
+            $('#fieldPayWith').focus();
         }
-        $scope.modalInstanceCollect = $uibModal.open({
-            animation: true,
-            templateUrl: 'confirmCollectModal.html',
-            scope: $scope,
-            windowClass: 'modal-md'
-        });
-        $('#fieldPayWith').focus();
     }
 
     $scope.changePay = function(amount){
         $scope.payWith = parseFloat(amount);
         $scope.payWrong = false;
         $scope.clientDetail.amountActual = ($scope.tSale - $scope.payWith < 0 ? 0 : $scope.tSale - $scope.payWith);
+        $scope.clientDetail.payment = $scope.payWith;
         if(amount >= $scope.tSale){
             $scope.amountComplete = true;
             $scope.cambio = $scope.payWith - $scope.tSale;
@@ -264,12 +280,20 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
         $scope.payWrong = false;
     }
 
+    $scope.closeAlertLimitCredit = function() {
+        $scope.limitWrong = false;
+    }
+
     $scope.closeAlertMissClient = function() {
         $scope.clientEmpty = false;
     }
 
     $scope.typeSale = function(iscred){
         $scope.isCredit = iscred;
+        if($scope.isCredit)
+            $scope.payWith = 0;
+        else
+            $scope.payWith = $scope.tSale;
     }
 
     $scope.finishSale = function(){
@@ -280,15 +304,20 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                 $scope.payWrong = true;
             }
         } else {
-            if($scope.clientDetail.idClient !== 0){
-                $scope.modalInstance = $uibModal.open({
-                    animation: true,
-                    templateUrl: 'confirmSaleCredit.html',
-                    scope: $scope,
-                    size: 'sm'
-                });
+            if($scope.clientDetail.limitCredit >= ($scope.clientDetail.debit + $scope.clientDetail.amountActual)){
+                if($scope.clientDetail.idClient !== 0){
+                    $scope.modalInstance = $uibModal.open({
+                        animation: true,
+                        templateUrl: 'confirmSaleCredit.html',
+                        scope: $scope,
+                        size: 'sm'
+                    });
+                } else {
+                    $scope.clientEmpty = true;
+                }
             } else {
-                $scope.clientEmpty = true;
+                $scope.overCharg = ($scope.clientDetail.debit + $scope.clientDetail.amountActual) - $scope.clientDetail.limitCredit;
+                $scope.limitWrong = true;
             }
         }
     }
@@ -300,11 +329,12 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
         Product.updateStokProducts(_.findWhere($scope.tabsSale, {active: true}).listProductsToSales).success(function(data){
             console.log(data.message);
             if(data.status === 'success'){
+                var userActual = $rootScope.userNow;
                 var sale = {
-                    idUser: 1,
-                    idClient: 1,
+                    idUser: $rootScope.userNow.id,
+                    idClient: $scope.isCredit ? $scope.clientDetail.idClient : 0,
                     comments: '',
-                    typeSale: 1,
+                    typeSale: $scope.isCredit ? 2 : 1,
                     amountSale: $scope.tSale,
                     listProductsToSales: _.findWhere($scope.tabsSale, {active: true}).listProductsToSales
                 };
@@ -316,18 +346,22 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                         _.findWhere($scope.tabsSale, {active: true}).subTotal = 0.0,
                         _.findWhere($scope.tabsSale, {active: true}).ivaSales = 0.0,
                         _.findWhere($scope.tabsSale, {active: true}).totalSales = 0.0
-                        if($scope.isCredit){
+                        if($scope.isCredit && !$scope.amountComplete){
                             if($scope.clientDetail.idCredit === 0){
                                 var credit = {
                                     amountCredit: $scope.clientDetail.debit + $scope.clientDetail.amountActual,
                                     idClient: $scope.clientDetail.idClient,
-                                    detailCredit: [{idSale: data.idSale}]
+                                    detailCredit: [{idSale: data.idSale, payment: $scope.payWith}]
                                 }
                                 Credit.saveCredir(credit).success(function(dataCredit){
                                     console.log(dataCredit.message);
                                     if($scope.clientDetail.clientType.idType !== 2){
                                         Client.updateStatusToCredit($scope.clientDetail.idClient).success(function(data){
                                             console.log(data.message)
+                                            $scope.modalInstanceCollect.dismiss('ok');
+                                            $scope.payWith = 0;
+                                            $scope.cambio = 0;
+                                            $('#ex4_value').focus();
                                         })
                                     }
                                     console.log($scope.clientDetail)
@@ -337,21 +371,27 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                                     idCredit: $scope.clientDetail.idCredit,
                                     amountCredit: $scope.clientDetail.debit + $scope.clientDetail.amountActual,
                                     idClient: $scope.clientDetail.idClient,
-                                    detailCredit: [{idSale: data.idSale}]
+                                    detailCredit: [{idSale: data.idSale, payment: $scope.payWith}]
                                 }
                                 Credit.update($scope.clientDetail.idCredit, credit).success(function(dataCredit){
                                     console.log(dataCredit.message);
+                                    
+                                    $scope.modalInstanceCollect.dismiss('ok');
+                                    $scope.payWith = 0;
+                                    $scope.cambio = 0;
+                                    $('#ex4_value').focus();
                                 });
                             }
+                        } else {
+                            $scope.modalInstanceCollect.dismiss('ok');
+                            $scope.payWith = 0;
+                            $scope.cambio = 0;
+                            $('#ex4_value').focus();
                         }
                     }
                 });
             }
         });
-        $scope.modalInstanceCollect.dismiss('ok');
-        $scope.payWith = 0;
-        $scope.cambio = 0;
-        $('#ex4_value').focus();
     }
 
     $scope.cancelCobro = function(){
