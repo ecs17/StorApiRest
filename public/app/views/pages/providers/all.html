@@ -1,0 +1,39 @@
+<div class="page-header">
+    <h1>
+        Proveedores
+        <a ui-sref="createprovider" class="btn btn-default">
+            <i class="fa fa-plus"></i>
+            Nuevo Provedor
+        </a>
+    </h1>
+</div>
+<div class="jumbotron text-center" ng-show="processing">
+    <i class="fa fa-repeat spinner"></i>
+    <p>Cargando Proveedores.......</p>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <p>Filtro:
+            <input class="form-control" type="text" ng-model="filter.$" />
+        </p>
+        <div class="table-responsive">
+            <table ng-table="tableParams" class="table">
+            <tr ng-repeat="provider in $data">
+                <td data-title="'Nombre'" sortable="'name'">
+                    {{provider.name}}
+                </td>
+                <td data-title="'RFC'" sortable="'rfc'">
+                    {{provider.rfc}}
+                </td>
+                <td data-title="'Telefono'" sortable="'phone'">
+                    {{provider.phone}}
+                </td>
+                <td>
+                    <a ui-sref="editProvider({idProvider: provider._id})" title="Actualizar Proveedor" class="btn btn-primary" ng-disabled="!provider.edit"><i class="fa fa-pencil"></i></a>
+                    <a href="#" ng-click="deleteProvider(provider._id, provider.edit)" title="Eliminar Proveedor" class="btn btn-danger" ng-disabled="!provider.edit"><i class="fa fa-user-times"></i></a>
+                </td>
+            </tr>
+        </table>
+        </div>
+    </div>
+</div>

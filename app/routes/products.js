@@ -129,5 +129,21 @@ module.exports = function(app, express, _){
                     status: 'success'
                 });
         });
+
+    apiRouter.route('/products/updtstock')
+        .put(function(req, res){
+            Product.findById(req.body._id, function(err, producto){
+                if(err) res.send(err);
+                producto.stocks = req.body.stocks;
+                producto.save(function(err){
+                    if(err) res.send(err);
+
+                    res.json({
+                        message: 'Producto actualizado con exito',
+                        status: 'success'
+                    });
+                });
+            });
+        });
     return apiRouter;
 }

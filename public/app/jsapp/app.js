@@ -1,7 +1,7 @@
 'use strict';
 angular.module('casantApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'authService', 'mainCtrl', 'userService',
     'catalogService', 'ngTable', 'BarCodeValidator', 'DinamicTab', 'productService', 'angucomplete-alt', 'salesService',
-    'clientService', 'creditService']);
+    'clientService', 'creditService', 'providerService', 'devChangeProdService']);
 
 angular.module('casantApp').config(function($httpProvider){
     $httpProvider.interceptors.push('AuthInterceptor');
@@ -109,6 +109,26 @@ angular.module('casantApp').config(
                 url: '/editClient/:idClient',
                 templateUrl: 'app/views/pages/clients/newAndUpdate.html',
                 controller: EditClientCtrl
+            })
+            .state('devAndChanges', {
+                url: '/devAndChanges',
+                templateUrl: 'app/views/pages/products/devChangsProd.html',
+                controller: DevChangProdCtrl
+            })
+            .state('providers', {
+                url: '/providers',
+                templateUrl: 'app/views/pages/providers/all.html',
+                controller: ProviderCtrl
+            })
+            .state('createprovider', {
+                url: '/createprovider',
+                templateUrl: 'app/views/pages/providers/newAndUpdate.html',
+                controller: CreateProviderCtrl
+            })
+            .state('editProvider', {
+                url: '/editProvider/:idProvider',
+                templateUrl: 'app/views/pages/providers/newAndUpdate.html',
+                controller: EditProviderCtrl
             })
             .state('nopermission', {
                 url: 'noPermission',

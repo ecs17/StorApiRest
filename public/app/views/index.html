@@ -10,7 +10,7 @@
     <title>Casant Tienda</title>
     <base href="/">
     <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/fontawesome/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/fontawesome/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/bootstrap/animate.css">
     <link rel="stylesheet" href="assets/css/ng-table/ng-table.css">
     <link rel="stylesheet" href="app/cssapp/main.css">
@@ -108,6 +108,19 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-user"></i>  Admon. de Proveedores <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a ui-sref="providers"><i class="fa fa-search"></i><i class="fa fa-user"></i> Ver Proveedores</a>
+                            </li>
+                            <li ng-if="userNow.type.idType == 1">
+                                <a ui-sref="createprovider"><i class="fa fa-user-plus"> Nuevo Proveedor </i></a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -133,15 +146,19 @@
     <script src="app/controllers/userCtrl.js"></script>
     <script src="app/controllers/productCtrl.js"></script>
     <script src="app/controllers/salesCtrl.js"></script>
+    <script src="app/controllers/devChangProdCtrl.js"></script>
     <script src="app/controllers/clientCtrl.js"></script>
+    <script src="app/controllers/providerCtrl.js"></script>
     <!--        <script src="app/controllers/loginCtrl.js"></script>-->
     <script src="app/services/authService.js"></script>
     <script src="app/services/userService.js"></script>
     <script src="app/services/productService.js"></script>
     <script src="app/services/clientService.js"></script>
+    <script src="app/services/providerService.js"></script>
     <script src="app/services/creditService.js"></script>
     <script src="app/services/salesService.js"></script>
     <script src="app/services/catalogService.js"></script>
+    <script src="app/services/devChangeProdService.js"></script>
     <script src="app/directives/utilsDirectives.js"></script>
     <script src="app/directives/dinamicTabDirective.js"></script>
     <script src="assets/js/underscore/underscore.min.js"></script>

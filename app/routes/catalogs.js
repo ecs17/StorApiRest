@@ -2,6 +2,8 @@ var UserTypeCatalog = require('../models/catalogs/catlg_UserType');
 var ProdPresCatalog = require('../models/catalogs/catlg_ProdPres');
 var MeasureTypeCatalog = require('../models/catalogs/catlg_MeasureType');
 var ClientTypeCatalog = require('../models/catalogs/catlg_ClientType');
+var ProviderTypeCatalog = require('../models/catalogs/catlg_ProviderType');
+var ProviderStCatalog = require('../models/catalogs/catlg_ProviderSt');
 
 module.exports = function(app, express){
     var apiRouter = express.Router();
@@ -59,9 +61,9 @@ module.exports = function(app, express){
             })
         });
     
-    apiRouter.route('/catlg_prodPres')
+    apiRouter.route('/providerTypeCatalog')
         .post(function(req, res){
-            var catalog = new ProdPresCatalog();
+            var catalog = new ProviderTypeCatalog();
 
             catalog.abbrev = "Test";
             catalog.description = "Test";
@@ -79,10 +81,37 @@ module.exports = function(app, express){
             })
         })
         .get(function(req, res){
-            ProdPresCatalog.find(function(err, prodPres){
+            ProviderTypeCatalog.find(function(err, providertType){
+                if(err) res.send(err);
+
+                res.json(providertType);
+            })
+        });
+    
+    apiRouter.route('/providerStatusCatalog')
+        .post(function(req, res){
+            var catalog = new providerStCatalog();
+
+            catalog.abbrev = "Test";
+            catalog.description = "Test";
+            catalog.idType = 6;
+
+            catalog.save(function(err){
+                if(err){
+                    if(err.code == 11000)
+                        return res.json({success: false, message: 'A user with that\ username already exists'});
+
+                    else
+                        return res.send(err)
+                }
+                res.json({message: 'User created!'});
+            })
+        })
+        .get(function(req, res){
+            ProviderStCatalog.find(function(err, providerStatus){
                 if(err) res.send(err);
                 
-                res.json(prodPres);
+                res.json(providerStatus);
             })
         });
     

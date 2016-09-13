@@ -357,7 +357,7 @@ function SaleCtrl($rootScope, $scope, $state, $window, Product, $compile, $sce, 
                                     console.log(dataCredit.message);
                                     if($scope.clientDetail.clientType.idType !== 2){
                                         Client.updateStatusToCredit($scope.clientDetail.idClient).success(function(data){
-                                            console.log(data.message)
+                                            console.log(data.message);
                                             $scope.modalInstanceCollect.dismiss('ok');
                                             $scope.payWith = 0;
                                             $scope.cambio = 0;

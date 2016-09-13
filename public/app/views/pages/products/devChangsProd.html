@@ -1,0 +1,98 @@
+<div class="page-header header-sale">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Cambios y devoluciones de productos</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-7">
+            <div angucomplete-alt id="searchProd" placeholder="Captura codigo de barras, clave del producto, descripcion o nombre" pause="100" selected-object="selectedProduct" local-data="productList" search-fields="bar_code,cv_product,name_prod,desc_prod" title-field="cv_product,name_prod,desc_prod" description-field="bar_code" minlength="1" input-class="form-control form-control-small" match-class="highlight-similar" override-suggestions="true" clear-selected="true" input-changed="loadProducts" auto-match="true">
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="col-md-12">
+    <div uib-alert ng-class="'alert-warning'" dismiss-on-timeout="10000" close="closeAlert()" ng-show="notMove"><h4>No se realizaron cambios o devoluciones, por lo que no se guardara ningun movimiento</h4></div>
+</div>
+<br/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-horizontal" ng-submit="confirmTransact()">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Codigo de Barras</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" ng-model="prodSel.bar_code" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Nombre del Producto</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" ng-model="prodSel.name_prod" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Existencias</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" ng-model="prodSel.stocks" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Devoluciones</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" ng-model="refund" ng-disabled="!prodisSelected" ng-change="changeRefund()">
+                    </div>
+                    <label class="col-sm-3 control-label">Cambios</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" ng-model="change" ng-disabled="!prodisSelected">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Proveedor</label>
+                    <div class="col-sm-8">
+                        <div angucomplete-alt id="ex4" placeholder="Captura el nombre del Provedor o Clave" pause="100" selected-object="selectedProvider" local-data="proviertList" search-fields="name,cve_provider" title-field="name,cve_provider" minlength="1" input-class="form-control form-control-small" match-class="highlight-similar" override-suggestions="true" input-changed="loadProviders" disable-input="!prodisSelected">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Observaciones</label>
+                    <div class="col-sm-10">
+                        <textarea rows="4" cols="100" ng-model="obs" ng-disabled="!prodisSelected"></textarea>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled="!prodisSelected">Guardar movimiento</button>
+                    </div>
+                </div>
+            </form>
+            <div class="col-sm-offset-3 col-sm-6">
+                <button class="btn btn-success btn-lg btn-block" ng-click="clearData()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="confirmTrans.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Movimientos</h3>
+    </div>
+    <div class="modal-body">
+        <div class="col-lg-10" ng-if="isdev">
+            <p>Se realizaran {{refund}} devoluciones de {{prodSel.name_prod}}. ¿Realizar movimiento?</p>
+        </div>
+        <div class="col-lg-10" ng-if="ischang">
+            <p>Se realizaran {{change}} cambios de {{prodSel.name_prod}}. ¿Realizar movimiento?</p>
+        </div>
+        <div class="col-lg-10" ng-if="devAndChang">
+            <p>Se realizaran {{refund}} devoluciones y {{change}} cambios  de {{prodSel.name_prod}}. ¿Realizar movimiento?</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="saveTransact()">OK</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

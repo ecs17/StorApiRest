@@ -28,6 +28,8 @@ var productsRouter = require('./app/routes/products')(app, express, _);
 var salesRouter = require('./app/routes/sales')(app, express, _);
 var clientRouter = require('./app/routes/clients')(app, express, _);
 var creditRouter = require('./app/routes/credits')(app, express, _);
+var devChangProd = require('./app/routes/devChangProd')(app, express, _);
+var providerRouter = require('./app/routes/providers')(app, express, _);
 
 app.use('/api', usersRouter);
 app.use('/api', productsRouter);
@@ -35,6 +37,8 @@ app.use('/api', usersTypeCatalogRouter);
 app.use('/api', salesRouter);
 app.use('/api', clientRouter);
 app.use('/api', creditRouter);
+app.use('/api', devChangProd);
+app.use('/api', providerRouter);
 
 app.get('*', function(req, res){
     res.sendFile(path.join(__dirname + '/public/app/views/index.html'));

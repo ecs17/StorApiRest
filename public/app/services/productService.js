@@ -30,6 +30,10 @@ angular.module('productService', ['ngResource'])
     productFactory.updateStokProducts = function(listProductsToSales){
         return $http.put('/api/products/updatestok', listProductsToSales);
     }
+
+    productFactory.updateStokProduct = function(product){
+        return $http.put('/api/products/updtstock', product);
+    }
     
     return productFactory;
 }])
