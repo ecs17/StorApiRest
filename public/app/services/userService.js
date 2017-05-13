@@ -2,6 +2,10 @@ angular.module('userService', ['ngResource'])
 
 .factory('User', ['$http', function($http){
     var userFactory = {};
+
+    userFactory.getSearch = function(anyField){
+        return $http.get('/api/users/search/' + anyField);
+    }
     
     userFactory.get = function(id){
         return $http.get('/api/users/' + id);

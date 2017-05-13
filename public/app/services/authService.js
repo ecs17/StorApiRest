@@ -9,6 +9,23 @@ angular.module('authService', [])
             password: password
         }).success(function(data){
             AuthToken.setToken(data);
+            /*$http.get('/');
+            $http.get('/app/cssapp/custom.min.css');
+            $http.get('/assets/js/angular/angular.min.js');
+            $http.get('/assets/js/angular/angular-route.js');
+            $http.get('/assets/js/angular/angular-resource.min.js');
+            $http.get('/assets/js/angular/angular-animate.js');
+            $http.get('/assets/js/angular/angular-ui-router.js');
+            $http.get('/assets/js/angular/angucomplete-alt.js');
+            $http.get('/assets/js/bootstrap/bootstrap.min.js');
+            $http.get('/assets/js/angular/angucomplete-alt.js');
+            $http.get('/assets/js/jquery/jquery.js');
+            $http.get('/assets/js/bootstrap/bootstrap.min.js');
+            $http.get('/assets/js/angular/ui-bootstrap-tpls-2.1.3.min.js');
+            $http.get('/app/jsapp/custom.js');
+            $http.get(' /app/jsapp/utils.js');
+            $http.get('/app/jsapp/app.js');*/
+            //$http.get('/api/me', {cache : true});
             return data;
         })
     };

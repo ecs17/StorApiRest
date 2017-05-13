@@ -1,7 +1,7 @@
 'use strict';
 angular.module('casantApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'authService', 'mainCtrl', 'userService',
     'catalogService', 'ngTable', 'BarCodeValidator', 'DinamicTab', 'productService', 'angucomplete-alt', 'salesService',
-    'clientService', 'creditService', 'providerService', 'devChangeProdService']);
+    'clientService', 'creditService', 'providerService', 'devChangeProdService', 'paymentService', 'RecordDiv', 'cgBusy']);
 
 angular.module('casantApp').config(function($httpProvider){
     $httpProvider.interceptors.push('AuthInterceptor');
@@ -38,18 +38,45 @@ angular.module('casantApp').run(function($rootScope, $uibModal, $state, $window)
 });
 
 angular.module('casantApp').config(
-    ['$stateProvider', '$urlRouterProvider',
-        function($stateProvider, $urlRouterProvider) {
+    ['$stateProvider', '$urlRouterProvider', '$locationProvider',
+        function($stateProvider, $urlRouterProvider, $locationProvider) {
+
+            $locationProvider.html5Mode({enabled:true});
             
             $urlRouterProvider
+                //.when('index.html', '/home')
+                //.when('', '/home')
                 .when('', '/home')
-                .when('/', '/home');
+                .when('/', '/home')
+                //.when('/main', '/home')
             
             $stateProvider
+            
+            /*.state('home', {
+                redirectTo: '',
+                url: '/main',
+                templateUrl: '<h1>Principal</h1>',
+                //controller: 'homeController'
+            })*/
             .state('home', {
+                abstract: true,
                 url: '/home',
-                templateUrl: 'app/views/pages/home.html'
+                template: '<ui-view/>'
             })
+            .state('home.test', {
+                url: '',
+                views: {
+                    'homeMain': {
+                        templateUrl: 'app/views/pages/home.html',
+                        controller: 'homeController'
+                    }
+                }
+            })
+            /*.state('home', {
+                url: '/home',
+                templateUrl: 'app/views/pages/home.html',
+                controller: 'homeController'
+            })*/
             .state('login', {
                 url: '/login',
                 templateUrl: 'app/views/pages/login.html',
@@ -95,6 +122,16 @@ angular.module('casantApp').config(
                 templateUrl: 'app/views/pages/sales/sale.html',
                 controller: SaleCtrl
             })
+            .state('salesReport', {
+                url: '/saleReport',
+                templateUrl: 'app/views/pages/sales/salesReport.html',
+                controller: SalesReportCtrl
+            })
+            .state('accountCredit', {
+                url: '/accountCredit',
+                templateUrl: 'app/views/pages/sales/creditClient.html',
+                controller: AccountCreditCtrl
+            })
             .state('clients', {
                 url: '/clients',
                 templateUrl: 'app/views/pages/clients/all.html',
@@ -134,6 +171,18 @@ angular.module('casantApp').config(
                 url: 'noPermission',
                 templateUrl: 'app/views/pages/noPermission.html'
             })
+            .state('404', {
+                url: '/404',
+                templateUrl: 'app/views/pages/404.html',
+                controller: Ctrl404
+            });
             
         }
      ])
+     .run(
+        ['$rootScope', '$state', '$stateParams',
+            function($rootScope, $state, $stateParams) {
+                $rootScope.$state = $state;
+                $rootScope.$stateParams = $stateParams;
+            }
+        ])

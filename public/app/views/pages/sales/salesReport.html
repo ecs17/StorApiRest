@@ -1,0 +1,211 @@
+<div class="page-title">
+    <div class="title_left">
+        <h3>Reportes de venta</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <h5>Consultar por:</h5>
+            <div class="x_content">
+                <div class="col-md-8 col-sm-8 col-xs-10 form-group">
+                    <div class="checkbox checkbox-primary checkbox-inline">
+                        <input id="chbox_timePeriod" class="styled" type="checkbox" ng-model="byDatePeriod">
+                        <label> Perdiodo de fechas</label>
+                    </div>
+                    <div class="checkbox checkbox-primary checkbox-inline">
+                        <input id="chbox_client" class="styled" type="checkbox" ng-model="byClient">
+                        <label> Cliente</label>
+                    </div>
+                    <div class="checkbox checkbox-primary checkbox-inline">
+                        <input id="chbox_user" class="styled" type="checkbox" ng-model="byUser">
+                        <label> Usuario</label>
+                    </div>
+                    <div class="checkbox checkbox-primary checkbox-inline">
+                        <input id="chbox_prod" class="styled" type="checkbox" ng-model="byProduct">
+                        <label> Producto</label>
+                    </div>
+                    <div class="checkbox checkbox-primary checkbox-inline">
+                        <input id="chbox_cash" class="styled" type="checkbox" ng-model="byCash">
+                        <label> Contado</label>
+                    </div>
+                    <div class="checkbox checkbox-primary checkbox-inline">
+                        <input id="chbox_credit" class="styled" type="checkbox" ng-model="byCredit">
+                        <label> Credito</label>
+                    </div>
+                    <div class="checkbox checkbox-primary checkbox-inline">
+                        <input id="chbox_total" class="styled" type="checkbox" ng-model="byAmount">
+                        <label> Total</label>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-6 form-group">
+                    <div class="form-group">
+                        <button class="btn btn-primary alignright" type="button" ng-click="generateReport()"><i class="fa fa-cogs" aria-hidden="true"></i> Consultar</button>
+                    </div>
+                </div>
+                <div id="reportPeriod" class="col-md-12 col-sm-9 col-xs-12 form-group">
+                    <div class="col-md-3 col-sm-12 col-xs-12" ng-show="byDatePeriod">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="dd-MMMM-yyyy" clear-text="clearStart" ng-model="startDate" placeholder="Fecha de Inicio" is-open="startOpen.opened" datepicker-options="dateOptionsStart" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-change="setMinDateEnd()" readonly/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openStart()"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12" ng-show="showEndDate && byDatePeriod">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="dd-MMMM-yyyy" clear-text="clearEnd" ng-model="endDate" placeholder="Fecha de Fin" is-open="endOpen.opened" datepicker-options="dateOptionsEnd" close-text="Close"  alt-input-formats="altInputFormats" readonly/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openEnd()"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12" ng-show="byClient">
+                        <p class="input-group">
+                            <div angucomplete-alt id="client" placeholder="Captura Nombre del cliente" pause="100" selected-object="selectedClient" local-data="clientList" search-fields="name,ap1,ap2" title-field="name,ap1,ap2" description-field="name" minlength="1" input-class="form-control form-control-small" match-class="highlight-similar" override-suggestions="true" clear-selected="true" input-changed="loadClients" auto-match="true">
+                            </div>
+                        </p>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12" ng-show="byUser">
+                        <p class="input-group">
+                            <div angucomplete-alt id="user" placeholder="Captura Nombre del usuario" pause="100" selected-object="selectedUser" local-data="userList" search-fields="name,ap1,ap2" title-field="name,ap1,ap2" description-field="name" minlength="1" input-class="form-control form-control-small" match-class="highlight-similar" override-suggestions="true" clear-selected="true" input-changed="loadUsers" auto-match="true">
+                            </div>
+                        </p>
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12" ng-show="byProduct">
+                        <p class="input-group">
+                            <div angucomplete-alt id="ex4" placeholder="Captura codigo de barras, clave del producto, descripcion o nombre" pause="100" selected-object="selectedProduct" local-data="productList" search-fields="bar_code,cv_product,name_prod,desc_prod" title-field="cv_product,name_prod,desc_prod" description-field="bar_code" minlength="1" input-class="form-control form-control-small" match-class="highlight-similar" override-suggestions="true" clear-selected="true" input-changed="loadProducts" auto-match="true">
+                            </div>
+                        </p>
+                    </div>
+                </div>
+                <div id="selected" class="col-md-12 col-sm-9 col-xs-12 form-group" ng-show="hasSelections">
+                    <div class="col-md-4 col-xs-12"  ng-class="{hide: !clientsSelected}">
+                        <h4 class="control-label">Clientes Seleccionados</h4>
+                        <div class="list-group" style="{{heightRecord}}" id="recordClients" record>
+                            <div ng-repeat="clientNow in clientListSelected" class="label-codes">
+                                <span class="label label-primary label-codes in-line">
+                                    {{clientNow.name}} 
+                                    <span ng-click="deletClient(clientNow.id)" class="glyphicon glyphicon-remove"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-12"  ng-class="{hide: !usersSelected}">
+                        <h4 class="control-label">Usuarios Seleccionados</h4>
+                        <div class="list-group" style="{{heightRecord}}" id="recordUsers" record>
+                            <div ng-repeat="userNow in userListSelected" class="label-codes">
+                                <span class="label label-primary label-codes in-line">
+                                    {{userNow.name}} 
+                                    <span ng-click="deletUser(userNow.id)" class="glyphicon glyphicon-remove"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-12"  ng-class="{hide: !productsSelected}">
+                        <h4 class="control-label">Productos Seleccionados</h4>
+                        <div class="list-group" style="{{heightRecord}}" id="recordProducts" record>
+                            <div ng-repeat="productNow in productListSelected" class="label-codes">
+                                <span class="label label-primary label-codes in-line">
+                                    {{productNow.name}} 
+                                    <span ng-click="deletProduct(productNow.bar_code)" class="glyphicon glyphicon-remove"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" ng-show="noResultMsj">
+                    <h3>No se encontraron ventas con los parametros de busca indicados</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12" ng-hide="noDataResult">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-8">
+                        <div class="btn-group">
+                            <a class="btn btn-default" ng-click="downloadPdf()">
+                                <i class="fa fa-file-pdf-o" title="Descarga PDF"></i>
+                                <i class="fa fa-download" title="Descarga PDF"></i>
+                            </a>
+                            <a class="btn btn-default" ng-click="openPdf()">
+                                <i class="fa fa-file-pdf-o" title="Imprimir PDF"></i>
+                                <i class="fa fa-print" title="Imprimir PDF"></i>
+                            </a>
+                            <a class="btn btn-default" ng-click="downloadExcel()">
+                                <i class="fa fa-file-excel-o" title="Descargar Excel"></i>
+                                <i class="fa fa-download" title="Descargar Excel"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="table-responsive div-table-content" ng-hide="noDataResult">
+                        <table id="datatable-buttons" ng-table="tableParams" class="table table-striped table-hover table-condensed table-sales">
+                            <tbody>
+                                <tr ng-repeat-start="saleDetail in $data">
+                                    <td class="row-sale-report" data-title="'Clave Venta'" sortable="'idSale'">
+                                        {{saleDetail.idSale}}
+                                    </td>
+                                    <td class="row-sale-report" data-title="'Cliente'" sortable="'idClient'">
+                                        {{saleDetail.detailClient === 'Venta al publico' ? saleDetail.detailClient : (saleDetail.detailClient.name + " " + saleDetail.detailClient.ap1 + " " + saleDetail.detailClient.ap2)}}
+                                    </td>
+                                    <td class="row-sale-report" data-title="'Usuario'" sortable="'idUser'">
+                                        {{saleDetail.detailUser.name}}
+                                    </td>
+                                    <td class="row-sale-report" data-title="'Fecha de Venta'" sortable="'dateSaleFormat'">
+                                        {{saleDetail.dateSaleFormat}}
+                                    </td>
+                                    <td class="row-sale-report" data-title="'Total De Productos'" sortable="'totalProducts'">
+                                        {{saleDetail.totalProducts}}
+                                    </td>
+                                    <td class="row-sale-report" data-title="'Total de Venta($)'" sortable="'totalAmount'">
+                                        {{saleDetail.totalAmount.toFixed(2)}}
+                                    </td>
+                                    <td class="row-sale-report" data-title="'Detalles'">
+                                        <button type="button" class="btn btn-default btn-xs" ng-click="selectedParent = (selectedParent == null ? saleDetail : null); saleDetail.selectedParent = selectedParent === saleDetail; loadDetailSale(selectedParent)">
+                                            <i class="fa fa-plus-square" aria-hidden="true" ng-hide="saleDetail.selectedParent"></i>
+                                            <i class="fa fa-minus-square" aria-hidden="true" ng-show="saleDetail.selectedParent"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat-end ng-if="selectedParent === saleDetail">
+                                    <td colspan="3">
+                                        <div class="nestedTblGutter">
+                                            <table ng-table="saleDetailParam" class="table ng-table-responsive table-condensed table-bordered table-hover">
+                                                <tr ng-repeat="child in $data">
+                                                    <td class="row-sale-report" data-title="'Nombre del Producto'" ng-bind="child.detailProduct.name_prod"></td>
+                                                    <td class="row-sale-report" data-title="'Descripcion del Producto'" ng-bind="child.detailProduct.desc_prod"></td>
+                                                    <td class="row-sale-report" data-title="'Precio del Producto'" ng-bind="child.detailProduct.price.sale_price.toFixed(2)"></td>
+                                                    <td class="row-sale-report" data-title="'Cantidad de Productos'" ng-bind="child.quantity"></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-12" ng-hide="noDataResult">
+                    <div class="col-md-6 col-sm-12">
+                        <h3><strong>Detalle general de las ventas consultadas: </strong></h3>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <h4>Total de Ventas: <strong>{{totalSales}}</strong></h4>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <h4>Total de Productos: <strong>{{totalProducts}}</strong></h4>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <h4>Total de Venta($): <strong>{{totalAmountSales.toFixed(2)}}</strong></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

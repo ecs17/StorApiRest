@@ -14,6 +14,10 @@ angular.module('creditService', ['ngResource'])
     creditFactory.getByidClient = function(idClient){
         return $http.get('/api/credit/' + idClient);
     };
+
+    creditFactory.getDetailByidClient = function(idClient){
+        return $http.get('/api/credit/detail/' + idClient);
+    };
     
     return creditFactory;
 }]);

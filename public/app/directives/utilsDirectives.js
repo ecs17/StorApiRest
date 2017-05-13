@@ -105,6 +105,15 @@ angular.module('BarCodeValidator', [])
                     else
                         scope.payWith = oldValue;
                 }
+            });	
+			scope.$watch('paymentNow', function(newValue,oldValue) {
+                check(newValue);
+                if (isNaN(newValue)) {
+                    if(typeof newValue === 'undefined')
+                        scope.paymentNow = '';
+                    else
+                        scope.paymentNow = oldValue;
+                }
             });
             function check(newValue){
                 var arr = String(newValue).split("");

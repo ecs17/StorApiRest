@@ -1,6 +1,9 @@
 function UserCtrl($rootScope, User, $scope, $state, $window, $filter, ngTableParams){
     $scope.processing = true;
     $scope.users = {}
+    linkNewUser =  $('#newUser');
+    $('#newUser').css('color', 'red');
+    $('#idFiltroUser').focus();
     //$rootScope.userNow = JSON.parse($window.localStorage.getItem('userData') || '{}');
     if($rootScope.userNow.type === undefined || $rootScope.userNow.type.idType !== 1){
         $state.go('nopermission');

@@ -1,7 +1,7 @@
 <div class="page-header">
     <h1>
         Users
-        <a ng-if="userNow.type.idType == 1" ui-sref="create" class="btn btn-default">
+        <a id="newUser" ng-if="userNow.type.idType == 1" ui-sref="create" class="btn btn-default">
             <i class="fa fa-user-plus"></i>
             New User
         </a>
@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-xs-11 col-sm-11 col-md-11">
         <p>Filtro:
-            <input class="form-control" type="text" ng-model="filter.$" />
+            <input id="idFiltroUser" class="form-control" type="text" ng-model="filter.$" />
         </p>
         <table ng-table="tableParams" class="table">
             <tr ng-repeat="user in $data">

@@ -12,9 +12,12 @@ var CreditsSchema = new Schema({
     amountCredit: {type: Number, required: true},
     idClient: {type: Number, required: true},
     statusCredit: {type: Boolean, required: true},
+    payment: Number,
+    datepayment: Date,
+    residue: Number,
     detailCredit: [
         {
-            idSale: {type: Number, required: true},
+            idSale: Number,
             payment: Number
         }
     ]

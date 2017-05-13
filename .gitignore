@@ -2,3 +2,15 @@ node_modules
 StorNodeAppiRest3.iml
 .idea
 .vscode
+/TestJavaNode/TestNodeJs/nbproject/private/
+/TestJavaNode/TestNodeJs/build/
+/TestJavaNode/TestNodeJs/dist/
+/TestJavaNode/TestNodeJs/
+TestNodeJs.jar
+filename.txt
+fonts
+lib
+public/assets/ReporteVentas-30-Noviembre-016.pdf
+tables.pdf
+/TestJavaNode/TestCap/nbproject/private/
+/TestJavaNode/TestCap/build/

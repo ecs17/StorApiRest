@@ -10,128 +10,126 @@
     <title>Casant Tienda</title>
     <base href="/">
     <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="assets/css/iCheck/flat/blue.css">-->
     <link rel="stylesheet" href="assets/css/fontawesome/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/bootstrap/animate.css">
+    <!--<link rel="stylesheet" href="assets/css/bootstrap/animate.css">-->
     <link rel="stylesheet" href="assets/css/ng-table/ng-table.css">
+    <link rel="stylesheet" href="assets/css/angular-busy.min.css">
     <link rel="stylesheet" href="app/cssapp/main.css">
-    <link rel="stylesheet" href="app/cssapp/sb-admin.css">
+    <link rel="stylesheet" href="app/cssapp/custom.min.css">
+    <link rel="stylesheet" href="app/cssapp/checkbox.css">
+    <!-- <link rel="stylesheet" href="app/cssapp/sb-admin.css">-->
     <link rel="stylesheet" href="assets/css/anguautocomplete/angucomplete-alt.css">
+    
 </head>
 
-<body ng-controller="mainController">
-    <div id="wrapper" ng-show="$state.current.name !== 'sale'">
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="margin-bottom: 0" ng-if="loggedIn" ng-disabled="!loggedIn">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a ui-sref="home" class="navbar-brand">
-                    <i class="fa fa-shopping-cart"></i> Casant Tienda
-                </a>
+<body class="nav-md" ng-controller="mainController">
+    <div class="container body">
+        <div class="main_container">
+            <div class="top_nav" ng-if="loggedIn" ng-disabled="!loggedIn">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                        </div>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="assets/img/user.png" alt="">{{userNow.name}}
+                                    <span class=" fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li><a href="#">Perfil</a></li>
+                                    <li><a href="#">Configuracion</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="javascript:;">Help</a></li>
+                                    <li ng-if="loggedIn">
+                                        <a ui-sref="login" ng-click="doLogout()">
+                                            <i class="fa fa-sign-out pull-right"></i> Salir
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Inicar Venta</a></li>
+                            <li><a href="#">Reportes</a></li>
+                            <li><a href="#">Pendientes</a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <ul class="nav navbar-right top-nav">
-                <li><a href="#">Inicar Venta</a></li>
-                <li><a href="#">Reportes</a></li>
-                <li><a href="#">Pendientes</a></li>
-                <li ng-if="!loggedIn">
-                    <a ui-sref="login">Entrar</a>
-                </li>
-                <li class="dropdown" ng-if="loggedIn">
-                    <a href="#" data-toggle="dropdown"> {{userNow.name}}! <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Perfil</a></li>
-                        <li><a href="#">Configuracion</a></li>
-                        <li class="divider"></li>
-                        <li ng-if="loggedIn">
-                            <a ui-sref="login" ng-click="doLogout()">
-                                Salir
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav side-nav" id="side-menu">
-                    <li ng-if="userNow.type.idType == 1">
-                        <a ui-sref="users">
-                            <i class="fa fa-users"></i> Administracion De Usuarios
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-list"></i> Administracion de Productos <i class="fa fa-fw fa-caret-down"></i>
-                        </a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a ui-sref="newProduct"><i class="fa fa-plus"></i> Alta Nuevos Productos</a>
-                            </li>
-                            <li>
-                                <a ui-sref="products"><i class="fa fa-refresh"></i> Consulta y Modifica Productos</a>
-                            </li>
-                            <li>
-                                <a ui-sref="addStocks"><i class="fa fa-bolt"></i> <i class="fa fa-plus"></i> Agragar Existencias</a>
-                            </li>
-                            <li>
-                                <a ui-sref="devAndChanges"><i class="fa fa-reply"></i> Devoluciones y Cambios</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-shopping-cart"></i> Ventas <i class="fa fa-fw fa-caret-down"></i>
-                        </a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a ui-sref="startSale"><i class="fa fa-sign-in"></i> Iniciar Venta</a>
-                            </li>
-                            <li>
-                                <a ui-sref="salesReport"><i class="fa fa-bar-chart"> Reportes de Venta </i></a>
-                            </li>
-                            <li>
-                                <a ui-sref="cancelSale"><i class="fa fa-times"> Cancelar Venta </i></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-user"></i>  Admon. de Clientes <i class="fa fa-fw fa-caret-down"></i>
-                        </a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a ui-sref="clients"><i class="fa fa-search"></i><i class="fa fa-user"></i> Ver Clientes</a>
-                            </li>
-                            <li ng-if="userNow.type.idType == 1">
-                                <a ui-sref="createclient"><i class="fa fa-user-plus"> Nuevo Cliente </i></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-user"></i>  Admon. de Proveedores <i class="fa fa-fw fa-caret-down"></i>
-                        </a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a ui-sref="providers"><i class="fa fa-search"></i><i class="fa fa-user"></i> Ver Proveedores</a>
-                            </li>
-                            <li ng-if="userNow.type.idType == 1">
-                                <a ui-sref="createprovider"><i class="fa fa-user-plus"> Nuevo Proveedor </i></a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+            <div class="col-md-3 left_col menu_fixed" ng-if="loggedIn" ng-disabled="!loggedIn">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a ui-sref="home.test" class="site_title"><i class="fa fa-paw"></i> <span>Casant Tienda</span></a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="profile">
+                        <div class="profile_pic">
+                            <img src="assets/img/user.png" alt="..." class="img-circle profile_img">
+                        </div>
+                        <div class="profile_info">
+                            <span>Bienvenido,</span>
+                            <h2>{{userNow.name}}</h2>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <h3>General</h3>
+                            <ul class="nav side-menu">
+                                <li ng-if="userNow.type.idType == 1">
+                                    <a id="adminUsers" ui-sref="users">
+                                        <i class="fa fa-users"></i> Administracion De Usuarios
+                                    </a>
+                                </li>
+                                <li><a><i class="fa fa-list"></i> Admon. de Productos <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a ui-sref="newProduct"><i class="fa fa-plus"></i> Alta Nuevos Productos</a></li>
+                                        <li><a ui-sref="products"><i class="fa fa-refresh"></i> Consulta y Modifica Productos</a></li>
+                                        <li><a ui-sref="addStocks"><i class="fa fa-bolt"></i> <i class="fa fa-plus"></i> Agragar Existencias</a></li>
+                                        <li><a ui-sref="devAndChanges"><i class="fa fa-reply"></i> Devoluciones y Cambios</a></li>
+                                    </ul>
+                                </li>
+                                <li><a><i class="fa fa-shopping-cart"></i> Ventas <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a ui-sref="startSale"><i class="fa fa-sign-in"></i> Iniciar Venta</a></li>
+                                        <li><a ui-sref="salesReport"><i class="fa fa-bar-chart"></i> Reportes de Venta </a></li>
+                                        <li><a ui-sref="cancelSale"><i class="fa fa-times"></i> Cancelar Venta </a></li>
+                                        <li><a ui-sref="accountCredit"><i class="fa fa-book"></i> Cobrar Cuenta </a></li>
+                                    </ul>
+                                </li>
+                                <li><a><i class="fa fa-user"></i>  Admon. de Clientes <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a ui-sref="clients"><i class="fa fa-search"></i><i class="fa fa-user"></i> Ver Clientes</a></li>
+                                        <li><a ui-sref="createclient"><i class="fa fa-user-plus"></i> Nuevo Cliente</a></li>
+                                    </ul>
+                                </li>
+                                <li><a><i class="fa fa-user"></i>  Admon. de Proveedores <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a ui-sref="providers"><i class="fa fa-search"></i><i class="fa fa-user"></i> Ver Proveedores</a></li>
+                                        <li><a ui-sref="createprovider"><i class="fa fa-user-plus"></i> Nuevo Proveedor</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </nav>
-        <div id="page-wrapper">
-            <div class="container-fluid" ui-view></div>
+            <div class="right_col" role="main" ng-class="!loggedIn ? 'loginClass' : 'right_col'">
+                <div class="" ui-view></div>
+            </div>
+            <footer ng-class="!loggedIn ? 'loginClass' : 'loginClassOff'">
+                <div class="pull-right">
+                    Casant Stor (Punto de Venta)
+                </div>
+                <div class="clearfix"></div>
+            </footer>
         </div>
     </div>
     <!--<div class="col-md-12">
         <div class="container-fluid" ui-view="sale"></div>
     </div>-->
-    <script src="assets/js/jquery/jquery-1.11.3.js"></script>
+    <script src="assets/js/jquery/jquery.js"></script>
     <script src="assets/js/angular/angular.min.js"></script>
     <script src="assets/js/angular/angular-route.js"></script>
     <script src="assets/js/angular/angular-resource.min.js"></script>
@@ -141,7 +139,17 @@
     <script src="assets/js/angular/angucomplete-alt.js"></script>
     <script src="assets/js/angular/ui-bootstrap-tpls-2.1.3.min.js"></script>
     <script src="assets/js/ng-table/ng-table.min.js"></script>
-    <!--    <script src="assets/js/sb-admin-2.js"></script>-->
+    <script src="assets/js/underscore/underscore.min.js"></script>
+    <script src="assets/js/angular-busy.min.js"></script>
+    
+    <script src="assets/js/jszip/dist/jszip.js"></script>
+    <script src="assets/js/pdfmake/build/pdfmake.js"></script>
+    <script src="assets/js/pdfmake/build/vfs_fonts.js"></script>
+
+    <script src="assets/js/qzjs/dependencies/rsvp-3.1.0.min.js"></script>
+    <script src="assets/js/qzjs/dependencies/sha-256.min.js"></script>
+    <script src="assets/js/qzjs/qz-tray.js"></script>
+
     <script src="app/controllers/mainCtrl.js"></script>
     <script src="app/controllers/userCtrl.js"></script>
     <script src="app/controllers/productCtrl.js"></script>
@@ -149,7 +157,7 @@
     <script src="app/controllers/devChangProdCtrl.js"></script>
     <script src="app/controllers/clientCtrl.js"></script>
     <script src="app/controllers/providerCtrl.js"></script>
-    <!--        <script src="app/controllers/loginCtrl.js"></script>-->
+    
     <script src="app/services/authService.js"></script>
     <script src="app/services/userService.js"></script>
     <script src="app/services/productService.js"></script>
@@ -159,15 +167,27 @@
     <script src="app/services/salesService.js"></script>
     <script src="app/services/catalogService.js"></script>
     <script src="app/services/devChangeProdService.js"></script>
+    <script src="app/services/paymentService.js"></script>
     <script src="app/directives/utilsDirectives.js"></script>
     <script src="app/directives/dinamicTabDirective.js"></script>
-    <script src="assets/js/underscore/underscore.min.js"></script>
-    <!--        <script src="app/app.routes.js"></script>-->
+    <script src="app/directives/selectedClientUser.js"></script>
+    
+    <script src="app/reportGenerators/salesGeneralReport.js"></script>
+    
     <script src="app/jsapp/app.js"></script>
     <script src="app/jsapp/utils.js"></script>
+    <script src="app/jsapp/custom.js"></script>
     
-    <script src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.2.0/metisMenu.min.js"></script>
-    <script src="assets/js/app/main.js"></script>
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.2.0/metisMenu.min.js"></script>
+    <script src="assets/js/app/main.js"></script>-->
+
+    
+<script type="text/javascript">
+    function changeState(el) {
+        if (el.readOnly) el.checked=el.readOnly=false;
+        else if (!el.checked) el.readOnly=el.indeterminate=true;
+    }
+</script>
 </body>
 
 </html>

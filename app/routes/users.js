@@ -4,14 +4,14 @@ var config = require('../../config');
 
 var superSecret = config.secret;
 
-module.exports = function(app, express){
+module.exports = function(app, express, dirName){
     var apiRouter = express.Router();
     
     apiRouter.get('/', function(req, res){
         res.json({ message: 'hooray! welcome to our api!'});
     });
     
-    apiRouter.post('/authenticate', function(req, res){
+    apiRouter.post('/authenticate', function(req, res, next){
         console.log(req.body.userName);
         
         User.findOne({
@@ -35,7 +35,9 @@ module.exports = function(app, express){
                     var token = jwt.sign(user, superSecret, {
                         expiresInMinutes: 1440
                     });
-                    console.log(user)
+                    /*console.log(user);
+                    app.use(express.static(dirName + '/public'));
+                    console.log(dirName);*/
                     res.json({
                         success: true,
                         name: user.name,
@@ -136,6 +138,20 @@ module.exports = function(app, express){
                 if(err) return res.send(err);
 
                 res.json({message: 'Successfully deleted'});
+            })
+        });
+
+    apiRouter.route('/users/search/:search')
+        .get(function(req, res){
+            //console.log(req.params.search);
+            var re = new RegExp('^'+req.params.search, 'i');
+            var queryOk = {$and: [{$or: [{'name': {$regex: re}}, {'ap1': {$regex: re}}, {'ap2': {$regex: re}}]}]};
+            var query = [{'name': {$regex: re}}, {'ap1': {$regex: re}}, {'ap2': {$regex: re}}];
+           // Client.find().or(query).exec(function(err, clients){
+            User.find(queryOk, function(err, users){
+                if(err) res.send(err);
+
+                res.json(users);
             })
         });
     
